@@ -1,0 +1,37 @@
+{
+    // Verwendet IntelliSense zum Ermitteln möglicher Attribute.
+    // Zeigen Sie auf vorhandene Attribute, um die zugehörigen Beschreibungen anzuzeigen.
+    // Weitere Informationen finden Sie unter https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Client",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build_client",
+            "program": "${workspaceFolder}/TicTacToe-Client/bin/Debug/net6.0/TicTacToe-Client.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/TicTacToe-Client",
+            "console": "integratedTerminal",
+            "stopAtEntry": false
+        },
+
+        {
+            "name": "Launch Server",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build_server",
+            "program": "${workspaceFolder}/TicTacToe-Server/bin/Debug/net7.0/TicTacToe-Server.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/TicTacToe-Server",
+            "console": "integratedTerminal",
+            "stopAtEntry": false
+        },
+
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        }
+    ]
+}
