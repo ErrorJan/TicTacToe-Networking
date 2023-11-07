@@ -10,7 +10,7 @@ class Server
 
     static void Main(string[] args)
     {
-        IPEndPoint ipEndPoint = new ( IPAddress.Any, 2030 );
+        /*IPEndPoint ipEndPoint = new ( IPAddress.Any, 2030 );
         Socket listener = new ( ipEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp );
         Console.WriteLine( ipEndPoint.AddressFamily );
 
@@ -26,9 +26,12 @@ class Server
             var testMsgBytes = Encoding.UTF8.GetBytes( testMsg );
             handler.Send( testMsgBytes, SocketFlags.None );
             Console.WriteLine( $"Send test message back to {handler.RemoteEndPoint} | {handler.LocalEndPoint}" );
-            Console.ReadLine();
             handler.Close();
             Console.WriteLine( "Disconnected!" );
-        }
+        }*/
+
+        AdminConsole.test();
+        Console.WriteLine( "test" );
+        
     }
 }

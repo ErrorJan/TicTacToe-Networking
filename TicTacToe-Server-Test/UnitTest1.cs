@@ -21,16 +21,6 @@ public class UnitTest1
         var response = Encoding.UTF8.GetString( buffer, 0, received );
         Console.WriteLine( $"Received: {response}" );
         client.LingerState = new LingerOption( false, 0 );
-
-        while ( client.Connected )
-        {
-            Console.WriteLine( "Not dead" );
-            Thread.Sleep(1000);
-            
-            string s = Console.ReadLine();
-            if (s == "y") 
-                client.Close();
-        }
-        Console.WriteLine( "Dead" );
+        client.Close();
     }
 }
