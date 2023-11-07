@@ -30,7 +30,7 @@ class Server
             Console.WriteLine( "Disconnected!" );
         }*/
 
-        AdminConsole.test();
+        // AdminConsole.test();
         Console.WriteLine( "test" );
         
     }
