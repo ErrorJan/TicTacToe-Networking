@@ -2,11 +2,23 @@
 
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Text;
 
 //https://learn.microsoft.com/en-us/dotnet/fundamentals/networking/sockets/socket-services
 class Server
 {
+    private static AdminConsole console = new();
+
+    private static void HandleAdminConsoleThreadDying( Exception exception )
+    {
+        Console.WriteLine( exception.ToString() );
+        console = new();
+        console.threadUnexpectadlyDied += HandleAdminConsoleThreadDying;
+        #pragma warning disable CS4014
+        console.SetThreadEnabledAsync( true );
+        #pragma warning restore CS4014
+    }
 
     static void Main(string[] args)
     {
@@ -30,8 +42,7 @@ class Server
             Console.WriteLine( "Disconnected!" );
         }*/
 
-        // AdminConsole.test();
-        Console.WriteLine( "test" );
-        
+        console.threadUnexpectadlyDied += HandleAdminConsoleThreadDying;
+        console.SetThreadEnabled( true );
     }
 }
