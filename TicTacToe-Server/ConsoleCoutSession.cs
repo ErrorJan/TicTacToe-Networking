@@ -3,7 +3,7 @@ using Spectre.Console;
 using System.Collections;
 using System.Collections.Generic;
 
-class ConsoleOutSession
+class ConsoleCoutSession
 {
     public const int MAX_LINE_BUFFER = 100;
     private Text[] outputLines = new Text[ MAX_LINE_BUFFER ];

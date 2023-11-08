@@ -1,13 +1,13 @@
 namespace TicTacToe_Server;
 using Spectre.Console;
 
-class AdminConsole
+partial class AdminConsole
 {
-    public event Action<Exception>? threadUnexpectadlyDied;
+    public ConsoleCoutSession currentSession;
 
-    public AdminConsole()
+    public AdminConsole( ConsoleCoutSession startingSession )
     {
-        currentSession = Server.mainCoutSession;
+        currentSession = startingSession;
         if ( spinUpConsoleTries > 0 )
         {
             spinUpConsoleTries--;
@@ -37,7 +37,7 @@ class AdminConsole
     {
         isThreadSupposedToRun = false;
 
-        int wait = 100;
+        int wait = 500;
         while ( consoleUpdateThread.IsAlive && wait > 0 )
         {
             await Task.Delay( 10 );
@@ -59,15 +59,14 @@ class AdminConsole
         RequestThreadKillAsync().Wait();
     }
 
+    private static int spinUpConsoleTries = 3;
     private TaskCompletionSource? tcs;
     private bool isThreadSupposedToRun = true;
     private ManualResetEvent mre = new(false);
     private Thread consoleUpdateThread;
-    private static int spinUpConsoleTries = 3;
     private Layout outputLayout = new( Text.Empty );
     private Layout inputLayout = new( Text.Empty );
     private string commandInput = "";
-    private ConsoleOutSession currentSession;
     private int sessionOffset = 0;
 
     private void InterfaceStart( Layout layout )
@@ -88,7 +87,22 @@ class AdminConsole
             switch ( readKey.Key )
             {
                 case ConsoleKey.Enter:
-                    currentSession.Debug( "Command typed: " + commandInput  );
+                    string[] commandFormatted = commandInput.Split( ' ' );
+                    string[] args = new string[ commandFormatted.Length - 1 ];
+                    Array.Copy( commandFormatted, 1, args, 0, args.Length );
+
+                    bool commandExists = false;
+                    foreach ( ICommand command in commands )
+                    {
+                        if ( command.CommandExecuted( commandFormatted[0], args, this ) )
+                            commandExists = true;
+                    }
+
+                    if ( !commandExists )
+                    {
+                        currentSession.Error( $"Unknown Command \"{commandFormatted[0]}\"" );
+                    }
+
                     commandInput = "";
                     break;
                 case ConsoleKey.Backspace:
@@ -159,7 +173,8 @@ class AdminConsole
         }
         catch ( Exception e )
         {
-            threadUnexpectadlyDied?.Invoke( e );
+            Console.WriteLine( e.ToString() );
+            Server.EventRequest( Server.CrossThreadEventType.AdminConsoleThreadDied );
         }
     }
 }
