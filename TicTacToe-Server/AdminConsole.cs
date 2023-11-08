@@ -161,10 +161,10 @@ partial class AdminConsole
                     while ( isThreadSupposedToRun )
                     {
                         Thread.Sleep( 50 );
-                        ctx.Refresh();
                         tcs?.SetResult();
                         tcs = null;
-                        // mre.WaitOne();
+                        mre.WaitOne();
+                        ctx.Refresh();
  
                         InterfaceUpdate( layout );
                     }

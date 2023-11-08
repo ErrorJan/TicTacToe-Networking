@@ -44,7 +44,12 @@ class Server
         {
             case CrossThreadEventType.AdminConsoleThreadDied:
                 console = new( mainCoutSession );
-                console.SetThreadEnabled( true );
+                Task.Run( () => 
+                { 
+                    Console.WriteLine( "Console Crashed... Press any key to restart TUI." );
+                    Console.ReadKey( true );
+                    console.SetThreadEnabled( true );
+                });
                 goto EventHandlerStart;
             case CrossThreadEventType.Quit:
                 // Cleanup

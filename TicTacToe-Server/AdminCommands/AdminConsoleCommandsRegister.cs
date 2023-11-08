@@ -2,8 +2,9 @@ namespace TicTacToe_Server;
 
 partial class AdminConsole
 {
-    private ICommand[] commands = 
+    public ICommand[] commands { get; private set; } = 
     { 
-        new QuitCommand() 
+        new QuitCommand(),
+        new CrashCommand(),
     };
 }
