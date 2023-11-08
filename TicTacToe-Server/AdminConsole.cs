@@ -7,11 +7,13 @@ class AdminConsole
 
     public AdminConsole()
     {
+        currentSession = Server.mainCoutSession;
         if ( spinUpConsoleTries > 0 )
         {
             spinUpConsoleTries--;
             consoleUpdateThread = new Thread( new ThreadStart( InterfaceLogic ) );
             consoleUpdateThread.Start();
+            consoleUpdateThread.Name = "Admin Console";
         }
         else
         {
@@ -40,7 +42,6 @@ class AdminConsole
         {
             await Task.Delay( 10 );
             wait--;
-            Console.WriteLine(wait);
         }
 
         if ( wait <= 0 )
@@ -65,7 +66,9 @@ class AdminConsole
     private static int spinUpConsoleTries = 3;
     private Layout outputLayout = new( Text.Empty );
     private Layout inputLayout = new( Text.Empty );
-    string commandInput;
+    private string commandInput = "";
+    private ConsoleOutSession currentSession;
+    private int sessionOffset = 0;
 
     private void InterfaceStart( Layout layout )
     {
@@ -79,14 +82,51 @@ class AdminConsole
 
     private void InterfaceUpdate( Layout layout )
     {
-        commandInput += Console.In.ReadLine();
-
-        while( Console.In.Peek() != -1 )
+        while( Console.KeyAvailable )
         {
-            commandInput += Console.In.Read();
+            var readKey = Console.ReadKey( true );
+            switch ( readKey.Key )
+            {
+                case ConsoleKey.Enter:
+                    currentSession.Debug( "Command typed: " + commandInput  );
+                    commandInput = "";
+                    break;
+                case ConsoleKey.Backspace:
+                    if ( commandInput.Length > 0)
+                        commandInput = commandInput.Remove( commandInput.Length-1, 1 );
+                    break;
+                case ConsoleKey.PageUp:
+                    if ( sessionOffset < currentSession.messagesLogged - (Console.WindowHeight-2) )
+                        sessionOffset++;
+                    break;
+                case ConsoleKey.PageDown:
+                    if ( sessionOffset > 0 )
+                        sessionOffset--;
+                    break;
+                default:
+                    if ( ( (int)readKey.Modifiers & ~(int)ConsoleModifiers.Shift ) == 0 )
+                    {
+                        if ( commandInput.Length < 50 )
+                        {
+                            commandInput += readKey.KeyChar;
+                        }
+                    }
+
+                    if ( (readKey.Modifiers & ConsoleModifiers.Control) != 0 && readKey.Key == ConsoleKey.W )
+                    {
+                        int index = commandInput.LastIndexOf( ' ' );
+                        if ( index == -1 )
+                            index = 0;
+                        index = commandInput.Length - index;
+                        commandInput = commandInput.Remove( commandInput.Length - index, index);
+                    }
+
+                    break;
+            }
         }
 
-        inputLayout.Update( new Text( commandInput ) );
+        outputLayout.Update( new Rows( currentSession.GetConsoleOutput( Console.WindowHeight-2, sessionOffset ) ) );
+        inputLayout.Update( new Text( "> " + commandInput ) );
     }
 
     private void InterfaceEnd()
@@ -101,16 +141,17 @@ class AdminConsole
             var layout = new Layout("Root");
             InterfaceStart( layout );
             AnsiConsole.Live( layout )
+                .AutoClear( false )
                 .Start(ctx => 
                 {
                     while ( isThreadSupposedToRun )
                     {
-                        Thread.Sleep( 20 );
+                        Thread.Sleep( 50 );
                         ctx.Refresh();
                         tcs?.SetResult();
                         tcs = null;
                         // mre.WaitOne();
-
+ 
                         InterfaceUpdate( layout );
                     }
                     InterfaceEnd();
