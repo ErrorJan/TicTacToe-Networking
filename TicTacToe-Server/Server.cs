@@ -1,20 +1,13 @@
 ﻿namespace TicTacToe_Server;
 
-using System.Net;
-using System.Net.Sockets;
-using System.Security.Cryptography;
-using System.Text;
+using TicTacToe_Shared;
 
 class Server
 {
     public static ConsoleCoutSession mainCoutSession { get; private set; } = new();
     public static bool debugMessagesEnabled = true;
-    private static AdminConsole console = new( mainCoutSession );
-
-    // Cross Thread Event Stuff
-    private static AutoResetEvent eventRequest = new(false);
-    private static AutoResetEvent eventLock = new(false);
-    private static CrossThreadEventType eventRequestType;
+    public static AdminConsole console { get; private set; } = new( mainCoutSession );
+    public static ListenForNewClients newClientsListener { get; private set; } = new( SharedGameInfo.GAME_PORT );
 
     public static void EventRequest( CrossThreadEventType eventType )
     {
@@ -22,6 +15,11 @@ class Server
         Server.eventRequestType = eventType;
         eventRequest.Set();
     }
+
+    // Cross Thread Event Stuff
+    private static AutoResetEvent eventRequest = new(false);
+    private static AutoResetEvent eventLock = new(false);
+    private static CrossThreadEventType eventRequestType;
 
     private static void Main(string[] args)
     {
@@ -31,31 +29,38 @@ class Server
 
         console.SetThreadEnabled( true );
 
-        // "Spin"
-        HandleThreadEvents();
+        // CrossThreadEvents handler
+        Task.Run( HandleThreadEvents );
     }
 
-    private static void HandleThreadEvents()
+    private static async Task HandleThreadEvents()
     {
-    EventHandlerStart:
-        eventLock.Set();
-        eventRequest.WaitOne();
-
-        switch( eventRequestType )
+        bool handleEvents = true;
+        while( handleEvents )
         {
-            case CrossThreadEventType.AdminConsoleThreadDied:
-                console = new( mainCoutSession );
-                Task.Run( () => 
-                { 
-                    Console.WriteLine( "Console Crashed... Press any key to restart TUI." );
-                    Console.ReadKey( true );
-                    console.SetThreadEnabled( true );
-                });
-                goto EventHandlerStart;
-            case CrossThreadEventType.Quit:
-                // Cleanup
-                console.RequestThreadKill();
-                break;
+            if ( eventRequest.WaitOne( 1 ) )
+            {
+                switch( eventRequestType )
+                {
+                    case CrossThreadEventType.AdminConsoleThreadDied:
+                        console = new( mainCoutSession );
+                        Console.WriteLine( "Console Crashed... Press any key to restart TUI." );
+                        Console.ReadKey( true );
+                        await console.SetThreadEnabledAsync( true );
+                        break;
+                    case CrossThreadEventType.Quit:
+                        // Cleanup
+                        console.RequestThreadKill();
+                        handleEvents = false;
+                        break;
+                }
+
+                eventLock.Set();
+            }
+            else
+            {
+                await Task.Delay( 10 );
+            }
         }
     }
 
@@ -70,24 +75,3 @@ class Server
         
     }
 }
-
-//https://learn.microsoft.com/en-us/dotnet/fundamentals/networking/sockets/socket-services
-/*IPEndPoint ipEndPoint = new ( IPAddress.Any, 2030 );
-Socket listener = new ( ipEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp );
-Console.WriteLine( ipEndPoint.AddressFamily );
-
-listener.Bind( ipEndPoint );
-listener.Listen( 20 );
-
-while ( true )
-{
-    Console.WriteLine( "Waiting..." );
-    var handler = listener.Accept();
-    Console.WriteLine( "Connected!" );
-    var testMsg = "Test";
-    var testMsgBytes = Encoding.UTF8.GetBytes( testMsg );
-    handler.Send( testMsgBytes, SocketFlags.None );
-    Console.WriteLine( $"Send test message back to {handler.RemoteEndPoint} | {handler.LocalEndPoint}" );
-    handler.Close();
-    Console.WriteLine( "Disconnected!" );
-}*/

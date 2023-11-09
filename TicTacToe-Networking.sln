@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe-Client", "TicTacT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe-Server-Test", "TicTacToe-Server-Test\TicTacToe-Server-Test.csproj", "{00C3F723-F1FD-43B5-8471-90ECC34484B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe-Shared", "TicTacToe-Shared\TicTacToe-Shared.csproj", "{1C155002-800F-4B25-A53F-41AAB0AC1650}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{00C3F723-F1FD-43B5-8471-90ECC34484B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00C3F723-F1FD-43B5-8471-90ECC34484B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00C3F723-F1FD-43B5-8471-90ECC34484B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C155002-800F-4B25-A53F-41AAB0AC1650}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C155002-800F-4B25-A53F-41AAB0AC1650}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C155002-800F-4B25-A53F-41AAB0AC1650}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C155002-800F-4B25-A53F-41AAB0AC1650}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
