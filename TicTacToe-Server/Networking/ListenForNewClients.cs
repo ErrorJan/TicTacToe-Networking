@@ -10,6 +10,7 @@ class ListenForNewClients
     {
         this.gamePort = gamePort;
 
+        // Runs on the thread pool
         Task.Run( HandleNewConnections );
     }
 
@@ -18,6 +19,8 @@ class ListenForNewClients
     //https://learn.microsoft.com/en-us/dotnet/fundamentals/networking/sockets/socket-services
     private async Task HandleNewConnections()
     {
+        await Task.Delay( 1 ); // Stop complaining reee
+
         /*
         IPEndPoint ipEndPoint = new ( IPAddress.Any, this.gamePort );
         Socket listener = new ( SocketType.Stream, ProtocolType.Tcp );

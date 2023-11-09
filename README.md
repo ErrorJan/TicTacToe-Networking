@@ -13,7 +13,7 @@ Here the client code resides. Everything from GUI to sending the information wha
 Here the server code resides. Everything from a TUI to the actual code listening for new clients/players that want to connect to the server and start a game.
 The server code is multi threaded.
 The TUI has it's own thread, and if it crashes it can be restored.
-The Main thread is tasked with handling cross thread events like quitting or when something crashes for it to restore it. It also handles new connections and creates a new thread, when a new session needs to be created.
+~~The Main thread is tasked with handling cross thread events like quitting or when something crashes for it to restore it. It also handles new connections and creates a new thread, when a new session needs to be created.~~
 The Session(s) thread is where the players will play against each other.
 
 ### TicTacToe-Shared

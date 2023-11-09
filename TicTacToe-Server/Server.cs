@@ -18,7 +18,7 @@ class Server
 
     // Cross Thread Event Stuff
     private static AutoResetEvent eventRequest = new(false);
-    private static AutoResetEvent eventLock = new(false);
+    private static AutoResetEvent eventLock = new(true);
     private static CrossThreadEventType eventRequestType;
 
     private static void Main(string[] args)
@@ -30,36 +30,29 @@ class Server
         console.SetThreadEnabled( true );
 
         // CrossThreadEvents handler
-        Task.Run( HandleThreadEvents );
+        HandleThreadEvents();
     }
 
-    private static async Task HandleThreadEvents()
+    private static void HandleThreadEvents()
     {
         bool handleEvents = true;
         while( handleEvents )
         {
-            if ( eventRequest.WaitOne( 1 ) )
+            eventLock.Set();
+            eventRequest.WaitOne();
+            switch( eventRequestType )
             {
-                switch( eventRequestType )
-                {
-                    case CrossThreadEventType.AdminConsoleThreadDied:
-                        console = new( mainCoutSession );
-                        Console.WriteLine( "Console Crashed... Press any key to restart TUI." );
-                        Console.ReadKey( true );
-                        await console.SetThreadEnabledAsync( true );
-                        break;
-                    case CrossThreadEventType.Quit:
-                        // Cleanup
-                        console.RequestThreadKill();
-                        handleEvents = false;
-                        break;
-                }
-
-                eventLock.Set();
-            }
-            else
-            {
-                await Task.Delay( 10 );
+                case CrossThreadEventType.AdminConsoleThreadDied:
+                    console = new( mainCoutSession );
+                    Console.WriteLine( "Console Crashed... Press any key to restart TUI." );
+                    Console.ReadKey( true );
+                    console.SetThreadEnabled( true );
+                    break;
+                case CrossThreadEventType.Quit:
+                    // Cleanup
+                    console.RequestThreadKill();
+                    handleEvents = false;
+                    break;
             }
         }
     }
@@ -72,6 +65,5 @@ class Server
 
     private static void TestStuff()
     {
-        
     }
 }
