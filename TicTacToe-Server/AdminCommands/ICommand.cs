@@ -1,4 +1,4 @@
-using TicTacToe_Server;
+namespace TicTacToe_Server;
 
 interface ICommand
 {

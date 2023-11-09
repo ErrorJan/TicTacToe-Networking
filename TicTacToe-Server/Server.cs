@@ -8,6 +8,7 @@ using System.Text;
 class Server
 {
     public static ConsoleCoutSession mainCoutSession { get; private set; } = new();
+    public static bool debugMessagesEnabled = true;
     private static AdminConsole console = new( mainCoutSession );
 
     // Cross Thread Event Stuff
@@ -66,10 +67,7 @@ class Server
 
     private static void TestStuff()
     {
-        mainCoutSession.Info( "This is an Info message" );
-        mainCoutSession.Debug( "This is a Debug message" );
-        mainCoutSession.Error( "This is an Error message" );
-        mainCoutSession.Warning( "This is a Warning message" );
+        
     }
 }
 

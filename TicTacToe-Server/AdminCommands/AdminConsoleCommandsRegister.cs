@@ -6,5 +6,7 @@ partial class AdminConsole
     { 
         new QuitCommand(),
         new CrashCommand(),
+        new HelpCommand(),
+        new DebugEnabledCommand(),
     };
 }
