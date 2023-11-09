@@ -2,6 +2,9 @@
 
 using TicTacToe_Shared;
 
+// READ ZIS
+// https://intellitect.com/blog/legacy-system-threading/
+
 class Server
 {
     public static ConsoleCoutSession mainCoutSession { get; private set; } = new();
