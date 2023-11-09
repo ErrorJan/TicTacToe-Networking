@@ -18,6 +18,7 @@ class ListenForNewClients
     //https://learn.microsoft.com/en-us/dotnet/fundamentals/networking/sockets/socket-services
     private async Task HandleNewConnections()
     {
+        /*
         IPEndPoint ipEndPoint = new ( IPAddress.Any, this.gamePort );
         Socket listener = new ( SocketType.Stream, ProtocolType.Tcp );
         Console.WriteLine( ipEndPoint.AddressFamily );
@@ -36,6 +37,6 @@ class ListenForNewClients
             Console.WriteLine( $"Send test message back to {handler.RemoteEndPoint} | {handler.LocalEndPoint}" );
             handler.Close();
             Console.WriteLine( "Disconnected!" );
-        }
+        }*/
     }
 }
