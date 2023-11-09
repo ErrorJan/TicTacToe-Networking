@@ -2,7 +2,7 @@
 A project for school where we have two (or more) clients playing Tic Tac Toe with each other.
 Achieved by the clients connecting to the server and the server being the main source of truth. Client-Server-Architecture
 
-Made by: Jan König, Liam Haid, Karlo Bilic<br>
+Made by: Jan König, Liam Haid, Karlo Bilić<br>
 License: Nothing (for now? Maybe [MIT license](https://opensource.org/license/mit/)?)
 
 ## Sub-projects
