@@ -10,7 +10,7 @@ class Server
     public static ConsoleCoutSession mainCoutSession { get; private set; } = new();
     public static bool debugMessagesEnabled = true;
     public static AdminConsole console { get; private set; } = new( mainCoutSession );
-    public static ListenForNewClients newClientsListener { get; private set; } = new( SharedGameInfo.GAME_PORT );
+    public static ListenForNewClients newClientsListener { get; private set; } = new( StaticGameInfo.GAME_PORT );
 
     public static void EventRequest( CrossThreadEventType eventType )
     {
