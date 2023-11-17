@@ -7,7 +7,7 @@ using System;
 
 public class UnitTest1
 {
-    public event Action<Socket, ConnectionDataType, byte[]>? OnReceived;
+    public event Action<Socket, EventType, byte[]>? OnReceived;
     public Task? handleReceiveTask;
     public PlayerData? player;
     public PlayerData? otherPlayer;
@@ -33,48 +33,48 @@ public class UnitTest1
         OnReceived -= OnReceivedEvent;
     }
 
-    private void OnReceivedEvent( Socket s, ConnectionDataType cdt, byte[] data )
+    private void OnReceivedEvent( Socket s, EventType cdt, byte[] data )
     {
         data = ArrayUtils.TrimArray( data, 1 );
         Console.WriteLine( "Received something." );
 
-        if ( ConnectionDataType.PlayerInfo == cdt )
+        if ( EventType.PlayerInfo == cdt )
         {
             byte playerID = data[0];
             player = new( $"Player{playerID}", playerID );
             ConnectionData.SendData( s, cdt, player.Serialize() ).Wait();
             Console.WriteLine( "Sending data." );
         }
-        else if ( ConnectionDataType.GameStart == cdt )
+        else if ( EventType.GameStart == cdt )
         {
             otherPlayer = PlayerData.Deserialize( ref data );
         }
-        else if ( ConnectionDataType.PlayerTurn == cdt )
+        else if ( EventType.PlayerTurn == cdt )
         {
             if ( data[0] == player?.playerID )
             {
                 if ( player.playerID == 1 )
                 {
                     BoardMove move = new( i++, 0, BoardPlace.X );
-                    ConnectionData.SendData( s, ConnectionDataType.PlayerTurn, BoardMove.SerializeMove( move ) ).Wait();
+                    ConnectionData.SendData( s, EventType.PlayerTurn, BoardMove.SerializeMove( move ) ).Wait();
                 }
                 else if ( player.playerID == 2 )
                 {
                     BoardMove move = new( 0, i++, BoardPlace.O );
-                    ConnectionData.SendData( s, ConnectionDataType.PlayerTurn, BoardMove.SerializeMove( move ) ).Wait();
+                    ConnectionData.SendData( s, EventType.PlayerTurn, BoardMove.SerializeMove( move ) ).Wait();
                 }
             }
         }
-        else if ( ConnectionDataType.GameEvent == cdt )
+        else if ( EventType.GameEvent == cdt )
         {
             BoardMove move = BoardMove.Deserialize( ref data );
             Console.WriteLine( move );
         }
-        else if ( ConnectionDataType.GameEnd == cdt )
+        else if ( EventType.GameEnd == cdt )
         {
             Console.WriteLine( $"Player ID: {data[0]} won" );
         }
-        else if ( ConnectionDataType.ConnectionClose == cdt )
+        else if ( EventType.ConnectionClose == cdt )
         {
             Console.WriteLine( "ConnectionClose Info" );
         }

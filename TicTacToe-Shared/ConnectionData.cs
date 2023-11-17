@@ -2,7 +2,7 @@ using System.Net.Sockets;
 
 namespace TicTacToe_Shared;
 
-public enum ConnectionDataType : byte
+public enum EventType : byte
 {
     Unknown,
     PlayerInfo,
@@ -14,9 +14,10 @@ public enum ConnectionDataType : byte
     ConnectionClosedExeption
 }
 
+[Obsolete]
 public static class ConnectionData
 {
-    public static async Task HandleReceive( Socket socket, Action<Socket, ConnectionDataType, byte[]>? raiseEvent )
+    public static async Task HandleReceive( Socket socket, Action<Socket, EventType, byte[]>? raiseEvent )
     {
         bool connectionClosed = false;
 
@@ -27,8 +28,8 @@ public static class ConnectionData
                 byte[] dataTypeByte = new byte[1];
                 await socket.ReceiveAsync( dataTypeByte, SocketFlags.None );
 
-                ConnectionDataType dataType = GetConnectionDataType( dataTypeByte );
-                connectionClosed = dataType == ConnectionDataType.ConnectionClose;
+                EventType dataType = GetConnectionDataType( dataTypeByte );
+                connectionClosed = dataType == EventType.ConnectionClose;
 
                 byte[] nextData = new byte[ socket.Available ];
                 if ( nextData.Length > 0 )
@@ -46,28 +47,28 @@ public static class ConnectionData
         catch ( Exception e )
         {
             Console.WriteLine( e );
-            raiseEvent?.Invoke( socket, ConnectionDataType.ConnectionClose, new byte[]{ (byte)ConnectionDataType.ConnectionClosedExeption } );
+            raiseEvent?.Invoke( socket, EventType.ConnectionClose, new byte[]{ (byte)EventType.ConnectionClosedExeption } );
         }
     }
 
-    public static ConnectionDataType GetConnectionDataType( byte[] array )
+    public static EventType GetConnectionDataType( byte[] array )
     {
         return GetConnectionDataType( array[0] );
     }
 
-    public static ConnectionDataType GetConnectionDataType( byte value )
+    public static EventType GetConnectionDataType( byte value )
     {
-        ConnectionDataType type;
+        EventType type;
 
-        if( Enum.IsDefined( typeof( ConnectionDataType ), value ) )
-            type = (ConnectionDataType)value;
+        if( Enum.IsDefined( typeof( EventType ), value ) )
+            type = (EventType)value;
         else
-            type = ConnectionDataType.Unknown;
+            type = EventType.Unknown;
 
         return type;
     }
 
-    public static async Task SendData( Socket s, ConnectionDataType dataType, byte[] data )
+    public static async Task SendData( Socket s, EventType dataType, byte[] data )
     {
         List<byte> message = new( 1 + data.Length );
         message.Add( (byte)dataType );
@@ -75,17 +76,17 @@ public static class ConnectionData
         await s.SendAsync( message.ToArray(), SocketFlags.None );
     }
 
-    public static async Task SendData( Socket s, ConnectionDataType dataType, byte data )
+    public static async Task SendData( Socket s, EventType dataType, byte data )
     {
         await SendData( s, dataType, new byte[]{ data } );
     }
 
-    public static async Task SendData( Socket s, ConnectionDataType dataType )
+    public static async Task SendData( Socket s, EventType dataType )
     {
         await SendData( s, dataType, new byte[]{} );
     }
 
-    public static async Task Broadcast( Socket s1, Socket s2, ConnectionDataType dataType, byte[] data )
+    public static async Task Broadcast( Socket s1, Socket s2, EventType dataType, byte[] data )
     {
         Task t1 = SendData( s1, dataType, data );
         Task t2 = SendData( s2, dataType, data );
@@ -94,12 +95,12 @@ public static class ConnectionData
         await t2;
     }
 
-    public static async Task Broadcast( Socket s1, Socket s2, ConnectionDataType dataType, byte data )
+    public static async Task Broadcast( Socket s1, Socket s2, EventType dataType, byte data )
     {
         await Broadcast( s1, s2, dataType, new byte[]{ data } );
     }
 
-    public static async Task Broadcast( Socket s1, Socket s2, ConnectionDataType dataType )
+    public static async Task Broadcast( Socket s1, Socket s2, EventType dataType )
     {
         await Broadcast( s1, s2, dataType, new byte[]{} );
     }

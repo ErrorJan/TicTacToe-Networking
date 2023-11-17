@@ -26,18 +26,22 @@ class ClientConnections
         TaskCompletionSource<PlayerData> player1ReqTask = new ();
         TaskCompletionSource<PlayerData> player2ReqTask = new ();
 
-        var receivedP1Func = ( Socket s, ConnectionDataType cdt, byte[] data ) => 
+        var receivedP1Func = ( Socket s, EventType cdt, byte[] data ) => 
             GetSafePlayerData( cdt, data, 1, player1ReqTask );
-        var receivedP2Func = ( Socket s, ConnectionDataType cdt, byte[] data ) => 
+        var receivedP2Func = ( Socket s, EventType cdt, byte[] data ) => 
             GetSafePlayerData( cdt, data, 2, player2ReqTask );
         player1ReceivedEvent += receivedP1Func;
         player2ReceivedEvent += receivedP2Func;
 
-        _ = ConnectionData.SendData( player1Connection, ConnectionDataType.PlayerInfo, 1 );
-        _ = ConnectionData.SendData( player2Connection, ConnectionDataType.PlayerInfo, 2 );
+        _ = ConnectionData.SendData( player1Connection, EventType.PlayerInfo, 1 );
+        _ = ConnectionData.SendData( player2Connection, EventType.PlayerInfo, 2 );
+
+        Server.console.currentSession.Debug( "Netcode PlayerData request." );
 
         await player1ReqTask.Task;
         await player2ReqTask.Task;
+
+        Server.console.currentSession.Debug( "Await finished." );
 
         player1ReceivedEvent -= receivedP1Func;
         player2ReceivedEvent -= receivedP2Func;
@@ -61,8 +65,8 @@ class ClientConnections
         if ( player1Data == null || player2Data == null )
             throw new Exception( "Players weren't initialized!" );
 
-        var awaitP1 = ConnectionData.SendData( player1Connection, ConnectionDataType.GameStart, player2Data.Serialize() );
-        var awaitP2 = ConnectionData.SendData( player2Connection, ConnectionDataType.GameStart, player1Data.Serialize() );
+        var awaitP1 = ConnectionData.SendData( player1Connection, EventType.GameStart, player2Data.Serialize() );
+        var awaitP2 = ConnectionData.SendData( player2Connection, EventType.GameStart, player1Data.Serialize() );
 
         await awaitP1;
         await awaitP2;
@@ -73,7 +77,7 @@ class ClientConnections
         player1ReceivedEvent += PlayerTurnEventHandler;
         player2ReceivedEvent += PlayerTurnEventHandler;
 
-        await ConnectionData.Broadcast( player1Connection, player2Connection, ConnectionDataType.PlayerTurn, nextPlayersTurn.playerID );
+        await ConnectionData.Broadcast( player1Connection, player2Connection, EventType.PlayerTurn, nextPlayersTurn.playerID );
     }
 
     public async Task UpdateBoard( BoardMove move )
@@ -82,7 +86,7 @@ class ClientConnections
         {
             player1ReceivedEvent -= PlayerTurnEventHandler;
             player2ReceivedEvent -= PlayerTurnEventHandler;
-            await ConnectionData.Broadcast( player1Connection, player2Connection, ConnectionDataType.GameEvent, BoardMove.SerializeMove( move ) );
+            await ConnectionData.Broadcast( player1Connection, player2Connection, EventType.GameEvent, BoardMove.SerializeMove( move ) );
         }
         else
             throw new Exception( "Board move Illegal!" );
@@ -93,7 +97,7 @@ class ClientConnections
         if ( player1Data == null || player2Data == null )
             throw new Exception( "Players weren't initialized!" );
 
-        await ConnectionData.Broadcast( player1Connection, player2Connection, ConnectionDataType.GameEnd, won.playerID );
+        await ConnectionData.Broadcast( player1Connection, player2Connection, EventType.GameEnd, won.playerID );
     }
 
     public async Task PlayerDraw()
@@ -101,12 +105,12 @@ class ClientConnections
         if ( player1Data == null || player2Data == null )
             throw new Exception( "Players weren't initialized!" );
 
-        await ConnectionData.Broadcast( player1Connection, player2Connection, ConnectionDataType.GameEnd, 0xFF );
+        await ConnectionData.Broadcast( player1Connection, player2Connection, EventType.GameEnd, 0xFF );
     }
 
     public async Task Disconnect()
     {
-        await ConnectionData.Broadcast( player1Connection, player2Connection, ConnectionDataType.ConnectionClose );
+        await ConnectionData.Broadcast( player1Connection, player2Connection, EventType.ConnectionClose );
 
         player1Connection.Disconnect( false );
         player2Connection.Disconnect( false );
@@ -119,12 +123,12 @@ class ClientConnections
 
     private Socket player1Connection;
     private Socket player2Connection;
-    private event Action<Socket, ConnectionDataType, byte[]>? player1ReceivedEvent;
-    private event Action<Socket, ConnectionDataType, byte[]>? player2ReceivedEvent;
+    private event Action<Socket, EventType, byte[]>? player1ReceivedEvent;
+    private event Action<Socket, EventType, byte[]>? player2ReceivedEvent;
     private PlayerData? player1Data;
     private PlayerData? player2Data;
 
-    private void GetSafePlayerData( ConnectionDataType cdt, byte[] data, int playerID, TaskCompletionSource<PlayerData> playerReqTask )
+    private void GetSafePlayerData( EventType cdt, byte[] data, int playerID, TaskCompletionSource<PlayerData> playerReqTask )
     {
         PlayerData? playerData = null;
         data = ArrayUtils.TrimArray( data, 1 );
@@ -140,12 +144,12 @@ class ClientConnections
         playerReqTask.SetResult( playerData );
     }
 
-    private void PlayerTurnEventHandler( Socket socket, ConnectionDataType cdt, byte[] data )
+    private void PlayerTurnEventHandler( Socket socket, EventType cdt, byte[] data )
     {
         if ( player1Data == null || player2Data == null )
             throw new Exception( "Players weren't initialized!" );
 
-        if ( cdt == ConnectionDataType.PlayerTurn )
+        if ( cdt == EventType.PlayerTurn )
         {
             PlayerData player = socket == player1Connection ? player1Data : player2Data;
             BoardMove move = BoardMove.Deserialize( ref data );
