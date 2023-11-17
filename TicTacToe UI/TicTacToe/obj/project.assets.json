@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\bilic\\Desktop\\Schule\\TicTacToe\\TicTacToe\\TicTacToe\\TicTacToe.csproj",
+      "projectUniqueName": "C:\\Users\\bilic\\Desktop\\Schule\\TicTacToe\\TicTacToe UI\\TicTacToe\\TicTacToe.csproj",
       "projectName": "TicTacToe",
-      "projectPath": "C:\\Users\\bilic\\Desktop\\Schule\\TicTacToe\\TicTacToe\\TicTacToe\\TicTacToe.csproj",
+      "projectPath": "C:\\Users\\bilic\\Desktop\\Schule\\TicTacToe\\TicTacToe UI\\TicTacToe\\TicTacToe.csproj",
       "packagesPath": "C:\\Users\\bilic\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\bilic\\Desktop\\Schule\\TicTacToe\\TicTacToe\\TicTacToe\\obj\\",
+      "outputPath": "C:\\Users\\bilic\\Desktop\\Schule\\TicTacToe\\TicTacToe UI\\TicTacToe\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
