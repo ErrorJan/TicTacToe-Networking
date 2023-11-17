@@ -96,6 +96,14 @@ class ClientConnections
         await ConnectionData.Broadcast( player1Connection, player2Connection, ConnectionDataType.GameEnd, won.playerID );
     }
 
+    public async Task PlayerDraw()
+    {
+        if ( player1Data == null || player2Data == null )
+            throw new Exception( "Players weren't initialized!" );
+
+        await ConnectionData.Broadcast( player1Connection, player2Connection, ConnectionDataType.GameEnd, 0xFF );
+    }
+
     public async Task Disconnect()
     {
         await ConnectionData.Broadcast( player1Connection, player2Connection, ConnectionDataType.ConnectionClose );

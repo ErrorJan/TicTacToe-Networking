@@ -44,9 +44,11 @@ class ListenForNewClients
             game = new( player1Socket, player2Socket );
             game.playerEvent += GameEvent;
 
+            console.Info( "Requesting Player Data." );
             var tuple = await game.RequestPlayerData();
             player1 = tuple.Item1;
             player2 = tuple.Item2;
+            console.Info( "Player Data received!" );
 
             currentPlayer = player1;
             await game.GameStart();
@@ -55,27 +57,60 @@ class ListenForNewClients
 
             await gameFinished.Task;
 
+            console.Info( "Disconnecting." );
+
             game.Disconnect().Wait();
         }
     }
 
     private void GameEvent( PlayerData player, BoardMove move )
     {
+        console.Info( $"Game Event received from player {player} with move {move}" );
+
         if ( player == currentPlayer )
         {
             if ( game?.board.board[move.x][move.y] == BoardPlace.Unassigned )
             {
+                console.Info( "Acknowledged move." );
+
                 game.UpdateBoard( move ).Wait();
+
 
                 bool playerWon = CheckBoard( game.board.board, move );
 
+                bool freeSpace = false;
+                foreach ( BoardPlace[] pArr in game.board.board )
+                {
+                    foreach ( BoardPlace p in pArr )
+                    {
+                        if ( p == BoardPlace.Unassigned )
+                        {
+                            freeSpace = true;
+                            break;
+                        }
+                    }
+
+                    if ( freeSpace )
+                        break;
+                }
+
                 if ( playerWon )
                 {
+                    console.Info( $"Player {player} won!" );
                     game.PlayerWin( player ).Wait();
                     gameFinished?.SetResult();
                 }
-                else
+                else if ( freeSpace )
+                {
+                    console.Info( $"Next player." );
                     PlayerNext();
+                }
+                else
+                {
+                    console.Info( $"Draw." );
+                    game.PlayerDraw().Wait();
+                    gameFinished?.SetResult();
+                }
             }
             else
             {

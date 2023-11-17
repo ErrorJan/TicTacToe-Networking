@@ -8,5 +8,6 @@ partial class AdminConsole
         new CrashCommand(),
         new HelpCommand(),
         new DebugEnabledCommand(),
+        new SwitchOutputCommand(),
     };
 }

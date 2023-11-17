@@ -1,55 +1,82 @@
 namespace TicTacToe_Server_Test;
+using TicTacToe_Shared;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
 
 public class UnitTest1
 {
+    public event Action<Socket, ConnectionDataType, byte[]>? OnReceived;
+    public Task? handleReceiveTask;
+    public PlayerData? player;
+    public PlayerData? otherPlayer;
+    public int i = 0;
+
     [Fact]
     public void Test1()
     {
         //Assert.Equal( 4, 5 );
 
-/*
-        IPEndPoint ipEndPoint = IPEndPoint.Parse( "127.0.2.2:2030" );
-        Socket client = new ( ipEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp );
+        IPEndPoint ipEndPoint = IPEndPoint.Parse( $"127.0.1.2:{StaticGameInfo.GAME_PORT}" );
+        Socket server = new ( ipEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp );
+        OnReceived += OnReceivedEvent;
+        Console.WriteLine( "Connecting..." );
+        server.Connect( ipEndPoint );
+        Console.WriteLine( "Connected!" );
 
-        client.Connect( ipEndPoint );
-        var buffer = new byte[ 1_024 ];
-        var received = client.Receive( buffer, SocketFlags.None );
-        var response = Encoding.UTF8.GetString( buffer, 0, received );
-        Console.WriteLine( $"Received: {response}" );
-        client.LingerState = new LingerOption( false, 0 );
-        client.Close();*/
 
-        /*Console.WriteLine( "Start" );
+        handleReceiveTask = ConnectionData.HandleReceive( server, OnReceived );
 
-        TaskCompletionSource<int> tcs1 = new TaskCompletionSource<int>();
-        Task<int> t1 = tcs1.Task;
+        handleReceiveTask.Wait();
+        Console.WriteLine( "Connection Closed" );
+        OnReceived -= OnReceivedEvent;
+    }
 
-        // Start a background task that will complete tcs1.Task
-        Task.Factory.StartNew(() =>
+    private void OnReceivedEvent( Socket s, ConnectionDataType cdt, byte[] data )
+    {
+        data = ArrayUtils.TrimArray( data, 1 );
+        Console.WriteLine( "Received something." );
+
+        if ( ConnectionDataType.PlayerInfo == cdt )
         {
-            Thread.Sleep(1000);
-            tcs1.SetResult(15);
-        });
-
-        Stopwatch sw = Stopwatch.StartNew();
-        int result = t1.Result;
-        sw.Stop();
-
-        tcs1.SetCanceled();
-
-        Console.WriteLine("(ElapsedTime={0}): t1.Result={1} (expected 15) ", sw.ElapsedMilliseconds, result);
-
-        sw = Stopwatch.StartNew();
-        result = t1.Result;
-        sw.Stop();
-
-        Console.WriteLine("(ElapsedTime={0}): t1.Result={1} (expected 15) ", sw.ElapsedMilliseconds, result);*/
+            byte playerID = data[0];
+            player = new( $"Player{playerID}", playerID );
+            ConnectionData.SendData( s, cdt, player.Serialize() ).Wait();
+            Console.WriteLine( "Sending data." );
+        }
+        else if ( ConnectionDataType.GameStart == cdt )
+        {
+            otherPlayer = PlayerData.Deserialize( ref data );
+        }
+        else if ( ConnectionDataType.PlayerTurn == cdt )
+        {
+            if ( data[0] == player?.playerID )
+            {
+                if ( player.playerID == 1 )
+                {
+                    BoardMove move = new( i++, 0, BoardPlace.X );
+                    ConnectionData.SendData( s, ConnectionDataType.PlayerTurn, BoardMove.SerializeMove( move ) ).Wait();
+                }
+                else if ( player.playerID == 2 )
+                {
+                    BoardMove move = new( 0, i++, BoardPlace.O );
+                    ConnectionData.SendData( s, ConnectionDataType.PlayerTurn, BoardMove.SerializeMove( move ) ).Wait();
+                }
+            }
+        }
+        else if ( ConnectionDataType.GameEvent == cdt )
+        {
+            BoardMove move = BoardMove.Deserialize( ref data );
+            Console.WriteLine( move );
+        }
+        else if ( ConnectionDataType.GameEnd == cdt )
+        {
+            Console.WriteLine( $"Player ID: {data[0]} won" );
+        }
+        else if ( ConnectionDataType.ConnectionClose == cdt )
+        {
+            Console.WriteLine( "ConnectionClose Info" );
+        }
     }
 }

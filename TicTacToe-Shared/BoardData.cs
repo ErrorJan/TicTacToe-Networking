@@ -43,6 +43,11 @@ public class BoardMove
         return data;
     }
 
+    public override string ToString()
+    {
+        return $"X: {x}, Y: {y}, Placement: {place}";
+    }
+
     public int x;
     public int y;
     public BoardPlace place;
