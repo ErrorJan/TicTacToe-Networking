@@ -16,7 +16,7 @@ public class BoardMove
         this.place = place;
     }
 
-    public static BoardMove Deserialize( ref byte[] data )
+    public static BoardMove Deserialize( byte[] data )
     {
         int x = data[ 0 ];
         int y = data[ 1 ];
@@ -25,7 +25,6 @@ public class BoardMove
         if ( !Enum.IsDefined( typeof( BoardPlace ), data[ 2 ] ) )
             throw new Exception( "Invalid board data!" );
 
-        data = ArrayUtils.TrimArray( data, 3 );
         BoardMove move = new ( x, y, place );
 
         return move;
@@ -46,6 +45,11 @@ public class BoardMove
     public override string ToString()
     {
         return $"X: {x}, Y: {y}, Placement: {place}";
+    }
+
+    public byte[] Serialize()
+    {
+        return SerializeMove( this );
     }
 
     public int x;
@@ -77,6 +81,11 @@ public class BoardData
         
         board[ move.y ][ move.x ] = move.place;
         return true;
+    }
+
+    public override string ToString()
+    {
+        return $"{(byte)board[0][0]} {(byte)board[0][1]} {(byte)board[0][2]}\n{(byte)board[1][0]} {(byte)board[1][1]} {(byte)board[1][2]}\n{(byte)board[2][0]} {(byte)board[2][1]} {(byte)board[2][2]}";
     }
 
     public BoardPlace[][] board { get; private set; }

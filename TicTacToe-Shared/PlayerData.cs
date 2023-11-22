@@ -1,4 +1,3 @@
-using System.Data.Common;
 using System.Text;
 
 namespace TicTacToe_Shared;
@@ -12,14 +11,14 @@ public class PlayerData
         
         if ( playerName.Length == 0 )
         {
-            playerName = "Furry Player";
+            playerName = $"Player{playerID}";
         }
 
         this.playerName = playerName;
         this.playerID = playerID;
     }
 
-    public static PlayerData? Deserialize( ref byte[] data )
+    public static PlayerData Deserialize( byte[] data )
     {
         byte playerID = data[0];
 
@@ -31,8 +30,6 @@ public class PlayerData
         string playerName = Encoding.UTF8.GetString( data, 1, stringSize );
 
         PlayerData obj = new( playerName, playerID );
-
-        data = ArrayUtils.TrimArray( data, stringSize + 1 );
 
         return obj;
     }
@@ -54,24 +51,12 @@ public class PlayerData
         return Serialize( this );
     }
 
-    public override bool Equals( object? obj )
+    public override string ToString()
     {
-        if ( obj == null || GetType() != obj.GetType() )
-        {
-            return false;
-        }
-        
-        PlayerData other = (PlayerData)obj;
-
-        return playerID == other.playerID;
+        return $"\"{playerName}\" ID: {playerID}";
     }
-    
+
     public readonly string playerName;
     public readonly byte playerID;
     public const int MAX_NAME_LETTERS = 15;
-
-    public override int GetHashCode()
-    {
-        throw new NotImplementedException();
-    }
 }
