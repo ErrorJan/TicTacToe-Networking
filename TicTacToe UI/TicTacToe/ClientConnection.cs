@@ -22,6 +22,7 @@ namespace TicTacToe
         {
             //IPEndPoint.Parse( $"127.0.1.2:{StaticGameInfo.GAME_PORT}" );
             this.server = new ( ipToServer.AddressFamily, SocketType.Stream, ProtocolType.Tcp );
+            this.server.Conenct( ipToServer );
             Console.WriteLine( $"Connected to {ipToServer}!" );
             Console.WriteLine( "Receiving player ID!" );
             byte[] buffer = new byte[ 1 ];
