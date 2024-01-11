@@ -16,6 +16,7 @@ namespace TicTacToe
         public event Action<BoardMove>? playerEvent;
         public event Action<PlayerData>? playerTurnEvent;
         public event Action<byte>? playerWonEvent;
+        public Task receiveActionTask;
 
         public ClientConnection( string playerName, IPEndPoint ipToServer )
         {
@@ -34,6 +35,8 @@ namespace TicTacToe
             server.Receive( buffer );
             opponent = PlayerData.Deserialize( buffer );
             Console.WriteLine( $"Opponent: {opponent}" );
+
+            receiveActionTask = Task.Run( ReceiveAction );
         }
 
         public async Task SendAction( int x, int y )
@@ -88,6 +91,7 @@ namespace TicTacToe
         {
             server.Close();
             Console.WriteLine( "Closing!" ); // <-- Test if this works, by just setting null reference.
+            receiveActionTask.Wait();
         }
     }
 }
