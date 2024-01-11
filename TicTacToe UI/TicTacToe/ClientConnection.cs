@@ -27,7 +27,7 @@ namespace TicTacToe
             Console.WriteLine( "Receiving player ID!" );
             byte[] buffer = new byte[ 1 ];
             server.Receive( buffer );
-            player = new( playerName, playerID );
+            player = new( playerName, buffer[0] );
             Console.WriteLine( $"Full PlayerData: {player}" );
             this.server.Send( player.Serialize() );
 
@@ -61,7 +61,7 @@ namespace TicTacToe
 
                     if ( eventBytes[0] == 0 )
                     {
-                        currentTurn = eventBytes[1] == playerID;
+                        currentTurn = eventBytes[1] == player.playerID;
                         if ( currentTurn )
                             playerTurnEvent?.Invoke( player );
                         else
