@@ -27,6 +27,7 @@ namespace TicTacToe
             Console.WriteLine( "Receiving player ID!" );
             byte[] buffer = new byte[ 1 ];
             server.Receive( buffer );
+            playerName = playerName.Substring(0, PlayerData.MAX_NAME_LETTERS);
             player = new( playerName, buffer[0] );
             Console.WriteLine( $"Full PlayerData: {player}" );
             this.server.Send( player.Serialize() );
