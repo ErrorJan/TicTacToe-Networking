@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\bilic\\Desktop\\Schule\\TicTacToe\\TicTacToe UI\\TicTacToe\\TicTacToe.csproj": {}
+    "D:\\it and stuff\\TicTacToe-Networking\\TicTacToe UI\\TicTacToe\\TicTacToe.csproj": {}
   },
   "projects": {
-    "C:\\Users\\bilic\\Desktop\\Schule\\TicTacToe\\TicTacToe UI\\TicTacToe\\TicTacToe.csproj": {
+    "D:\\it and stuff\\TicTacToe-Networking\\TicTacToe UI\\TicTacToe\\TicTacToe.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\bilic\\Desktop\\Schule\\TicTacToe\\TicTacToe UI\\TicTacToe\\TicTacToe.csproj",
+        "projectUniqueName": "D:\\it and stuff\\TicTacToe-Networking\\TicTacToe UI\\TicTacToe\\TicTacToe.csproj",
         "projectName": "TicTacToe",
-        "projectPath": "C:\\Users\\bilic\\Desktop\\Schule\\TicTacToe\\TicTacToe UI\\TicTacToe\\TicTacToe.csproj",
+        "projectPath": "D:\\it and stuff\\TicTacToe-Networking\\TicTacToe UI\\TicTacToe\\TicTacToe.csproj",
         "packagesPath": "C:\\Users\\bilic\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\bilic\\Desktop\\Schule\\TicTacToe\\TicTacToe UI\\TicTacToe\\obj\\",
+        "outputPath": "D:\\it and stuff\\TicTacToe-Networking\\TicTacToe UI\\TicTacToe\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -31,7 +31,11 @@
         "frameworks": {
           "net7.0-windows7.0": {
             "targetAlias": "net7.0-windows",
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\it and stuff\\TicTacToe-Networking\\TicTacToe-Shared\\TicTacToe-Shared.csproj": {
+                "projectPath": "D:\\it and stuff\\TicTacToe-Networking\\TicTacToe-Shared\\TicTacToe-Shared.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -60,6 +64,65 @@
             },
             "Microsoft.WindowsDesktop.App.WindowsForms": {
               "privateAssets": "none"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\it and stuff\\TicTacToe-Networking\\TicTacToe-Shared\\TicTacToe-Shared.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\it and stuff\\TicTacToe-Networking\\TicTacToe-Shared\\TicTacToe-Shared.csproj",
+        "projectName": "TicTacToe-Shared",
+        "projectPath": "D:\\it and stuff\\TicTacToe-Networking\\TicTacToe-Shared\\TicTacToe-Shared.csproj",
+        "packagesPath": "C:\\Users\\bilic\\.nuget\\packages\\",
+        "outputPath": "D:\\it and stuff\\TicTacToe-Networking\\TicTacToe-Shared\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\bilic\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
