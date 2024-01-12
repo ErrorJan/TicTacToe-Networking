@@ -5,13 +5,13 @@ namespace TicTacToe
 {
     public partial class Form1 : Form
     {
-        bool Spieler1 = true, SpEnde = false;
-        int SiegeSp1 = 0, SiegeSp2 = 0;
         private Button[,] but = new Button[3,3];
         private Label[] lab = new Label[5];
+        private string name;
         public Form1()
         {
             InitializeComponent();
+            name=Microsoft.VisualBasic.Interaction.InputBox("Bitte geben Sie Ihren Namen ein.", "Nameauswahl", "Name");
             erzeuge();
             Clearall();
         }
@@ -23,7 +23,7 @@ namespace TicTacToe
             posY = 30;
 
 
-            for (int i = 0; i < 3; i++)     // 9 Buttons f�r das Spiel Layout
+            for (int i = 0; i < 3; i++)     // 9 Buttons für das Spiel Layout
             {
                 for (int j = 0; j < 3; j++)
                 { 
@@ -55,10 +55,17 @@ namespace TicTacToe
                         lab[i].Location = new Point(250, 30);
                         lab[i].Font = new Font("Microsoft sans serif", 12, FontStyle.Bold);
                         lab[i].Name = "lab" + (i + 1);
-                        lab[i].Text = "Spieler 1 am Zug";
+                        lab[i].Text = name;
                         this.Controls.Add(lab[i]);
                         break;
-                    case 1: break;        // Label 2: 
+                    case 1:
+                        lab[i].Width = 200;
+                        lab[i].Height = 40;
+                        lab[i].Location = new Point(250, 180);
+                        lab[i].Font = new Font("Microsoft sans serif", 12, FontStyle.Bold);
+                        lab[i].Name = "lab" + (i + 1);
+                        lab[i].Text = "";
+                        this.Controls.Add(lab[i]); break;        // Label 2: 
                     case 2: break;
                     case 3: break;
                     case 4: break;
@@ -77,13 +84,12 @@ namespace TicTacToe
                 }               
             }
 
-            lab[0].Text = "Spieler 1 am Zug";
-
-            Spieler1 = true;
+            lab[0].Text = name;
+            lab[1].Text = "";
             return;
         }
 
-        // Funktion f�r die Buttons der Map
+        // Funktion für die Buttons der Map
         private void buttonsClick(object sender, EventArgs e)       
         {
             Button aktBut = (Button)sender;
@@ -99,23 +105,20 @@ namespace TicTacToe
         }
 
         private void PlayerTurnEvent(PlayerData player)
-        {
-            if (Connection.currentTurn)
-            {
-                lab[1].Text = player.playerName;  
-            }
+        {                      
+            lab[0].Text = player.playerName + " ist am Zug.";             
         }
 
-        private void PlayerWonEvent( PlayerData playerID )
+        private void PlayerWonEvent( PlayerData player )
         {
-
+            lab[1].Text = player.playerName + " hat gewonnen";
         }
 
         ClientConnection Connection;
         private void button1_Click(object sender, EventArgs e)   
         {                
             Clearall();
-            Connection = new("Hope", IPEndPoint.Parse($"127.0.1.2:{StaticGameInfo.GAME_PORT}"));
+            Connection = new(name, IPEndPoint.Parse($"127.0.1.2:{StaticGameInfo.GAME_PORT}"));
             Connection.playerEvent += PlayerEvent;
             Connection.playerTurnEvent += PlayerTurnEvent;
             Connection.playerWonEvent += PlayerWonEvent;
