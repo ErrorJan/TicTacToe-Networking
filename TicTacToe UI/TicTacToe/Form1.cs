@@ -23,7 +23,7 @@ namespace TicTacToe
             posY = 30;
 
 
-            for (int i = 0; i < 3; i++)     // 9 Buttons für das Spiel Layout
+            for (int i = 0; i < 3; i++)     // 9 Buttons fï¿½r das Spiel Layout
             {
                 for (int j = 0; j < 3; j++)
                 { 
@@ -83,7 +83,7 @@ namespace TicTacToe
             return;
         }
 
-        // Funktion für die Buttons der Map
+        // Funktion fï¿½r die Buttons der Map
         private void buttonsClick(object sender, EventArgs e)       
         {
             Button aktBut = (Button)sender;
@@ -106,7 +106,7 @@ namespace TicTacToe
             }
         }
 
-        private void PlayerWonEvent(byte playerID)
+        private void PlayerWonEvent( PlayerData playerID )
         {
 
         }
