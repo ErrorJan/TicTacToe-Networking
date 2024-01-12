@@ -3,8 +3,8 @@ namespace TicTacToe_Shared;
 public enum BoardPlace : byte
 {
     Unassigned,
-    O,
-    X
+    X,
+    O
 }
 
 public class BoardMove
