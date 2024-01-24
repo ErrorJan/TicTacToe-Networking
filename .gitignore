@@ -475,27 +475,3 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-TicTacToe UI/TicTacToe/bin/Debug/net7.0-windows/TicTacToe.dll
-TicTacToe UI/TicTacToe/bin/Debug/net7.0-windows/TicTacToe.exe
-TicTacToe UI/TicTacToe/bin/Debug/net7.0-windows/TicTacToe.pdb
-TicTacToe UI/TicTacToe/bin/Debug/net7.0-windows/TicTacToe.runtimeconfig.json
-TicTacToe UI/TicTacToe/obj/Debug/net7.0-windows/apphost.exe
-TicTacToe UI/TicTacToe/obj/Debug/net7.0-windows/ref/TicTacToe.dll
-TicTacToe UI/TicTacToe/obj/Debug/net7.0-windows/refint/TicTacToe.dll
-TicTacToe UI/TicTacToe/obj/Debug/net7.0-windows/TicTacToe.AssemblyInfo.cs
-TicTacToe UI/TicTacToe/obj/Debug/net7.0-windows/TicTacToe.AssemblyInfoInputs.cache
-TicTacToe UI/TicTacToe/obj/Debug/net7.0-windows/TicTacToe.assets.cache
-TicTacToe UI/TicTacToe/obj/Debug/net7.0-windows/TicTacToe.csproj.AssemblyReference.cache
-TicTacToe UI/TicTacToe/obj/Debug/net7.0-windows/TicTacToe.csproj.CoreCompileInputs.cache
-TicTacToe UI/TicTacToe/obj/Debug/net7.0-windows/TicTacToe.csproj.FileListAbsolute.txt
-TicTacToe UI/TicTacToe/obj/Debug/net7.0-windows/TicTacToe.csproj.GenerateResource.cache
-TicTacToe UI/TicTacToe/obj/Debug/net7.0-windows/TicTacToe.designer.runtimeconfig.json
-TicTacToe UI/TicTacToe/obj/Debug/net7.0-windows/TicTacToe.dll
-TicTacToe UI/TicTacToe/obj/Debug/net7.0-windows/TicTacToe.GeneratedMSBuildEditorConfig.editorconfig
-TicTacToe UI/TicTacToe/obj/Debug/net7.0-windows/TicTacToe.genruntimeconfig.cache
-TicTacToe UI/TicTacToe/obj/Debug/net7.0-windows/TicTacToe.pdb
-TicTacToe UI/TicTacToe/obj/project.assets.json
-TicTacToe UI/TicTacToe/obj/project.nuget.cache
-TicTacToe UI/TicTacToe/obj/TicTacToe.csproj.nuget.dgspec.json
-TicTacToe UI/TicTacToe/obj/TicTacToe.csproj.nuget.g.props
-TicTacToe-Server-Test/TicTacToe-Server-Test.csproj
