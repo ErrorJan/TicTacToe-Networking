@@ -137,9 +137,7 @@ namespace TicTacToe
         {
             InitializeComponent();
             Ep = Microsoft.VisualBasic.Interaction.InputBox("Wählen sie die Ip", "IP-Selector", "127.0.1.2");
-            Ep = Ep + ":" + StaticGameInfo.GAME_PORT;
-            erzeuge();
-            Clearall();
+            Ep = Ep + ":" + StaticGameInfo.GAME_PORT;          
         }
 
     }
