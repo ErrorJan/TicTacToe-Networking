@@ -14,6 +14,8 @@ namespace TicTacToe
         {
             InitializeComponent();
             name = Microsoft.VisualBasic.Interaction.InputBox("Bitte geben Sie Ihren Namen ein.", "Nameauswahl", "Name");
+            if (name.Length > PlayerData.MAX_NAME_LETTERS)
+                name = name.Substring(0, PlayerData.MAX_NAME_LETTERS);
             this.Text = name;
             erzeuge();
             Clearall();
