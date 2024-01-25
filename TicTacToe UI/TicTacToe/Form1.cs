@@ -71,7 +71,7 @@ namespace TicTacToe
             }
             return;
         }
-        private void PlayerEvent(BoardMove move)
+        private void PlayerEvent(PlayerAction move)
         {
             but[move.x, move.y].Text = move.place.ToString();
         }
