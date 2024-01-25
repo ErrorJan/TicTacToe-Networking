@@ -15,7 +15,7 @@ namespace TicTacToe
         public bool currentTurn { private set; get; }
         public event Action<BoardMove>? playerEvent;
         public event Action<PlayerData>? playerTurnEvent;
-        public event Action<PlayerData>? playerWonEvent;
+        public event Action<PlayerData?>? playerWonEvent;
         public Task receiveActionTask;
 
         public ClientConnection( string playerName, IPEndPoint ipToServer )
@@ -74,11 +74,14 @@ namespace TicTacToe
                         bool thisPlayerWon = eventBytes[1] == player.playerID;
                         if ( thisPlayerWon )
                             playerWonEvent?.Invoke( player );
-                        else
+                        else if (eventBytes[1] > 0 )                        
                             playerWonEvent?.Invoke( opponent );
+                        else 
+                            playerWonEvent?.Invoke( null );
 
                         break;
                     }
+                    
 
                     eventBytes = new byte[ 3 ];
                     server.Receive( eventBytes );

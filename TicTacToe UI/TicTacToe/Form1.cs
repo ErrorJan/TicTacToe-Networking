@@ -8,23 +8,16 @@ namespace TicTacToe
     public partial class Form1 : Form
     {
         private Button[,] but = new Button[3, 3];
-        private Label[] lab = new Label[5];
         private string name;
         private string Ep;
         public Form1()
         {
             InitializeComponent();
             name = Microsoft.VisualBasic.Interaction.InputBox("Bitte geben Sie Ihren Namen ein.", "Nameauswahl", "Name");
+            this.Text = name;
             erzeuge();
             Clearall();
         }
-        /* public Form2()
-         {
-             InitializeComponent();
-             name = Microsoft.VisualBasic.Interaction.InputBox("Bitte server", "Nameauswahl", "Name");
-             erzeuge();
-             Clearall();
-         }*/
         private void erzeuge()      // erzeugt alle buttons dynamisch
         {
             int posX, posY;
@@ -50,37 +43,6 @@ namespace TicTacToe
                 posX -= 195;
                 posY += 60;
             }
-
-
-
-            for (int i = 0; i < 5; i++)    // 5 verschieden Labels die gebraucht sind (noch nicht alle fertig)
-            {                              // bin mir unsicher ob wir alle brauchen uberhaupt, ist jetzt da einfach
-                lab[i] = new Label();
-                switch (i)
-                {
-                    case 0:                // Label 1: Status der Spieler Zuge 
-                        lab[i].Width = 200;
-                        lab[i].Height = 40;
-                        lab[i].Location = new Point(250, 30);
-                        lab[i].Font = new Font("Microsoft sans serif", 12, FontStyle.Bold);
-                        lab[i].Name = "lab" + (i + 1);
-                        lab[i].Text = name;
-                        this.Controls.Add(lab[i]);
-                        break;
-                    case 1:
-                        lab[i].Width = 200;
-                        lab[i].Height = 40;
-                        lab[i].Location = new Point(250, 180);
-                        lab[i].Font = new Font("Microsoft sans serif", 12, FontStyle.Bold);
-                        lab[i].Name = "lab" + (i + 1);
-                        lab[i].Text = "";
-                        this.Controls.Add(lab[i]);
-                        break;        // Label 2: 
-                    case 2:break;
-                    case 3: break;
-                    case 4: break;
-                }
-            }
             return;
         }
 
@@ -94,8 +56,8 @@ namespace TicTacToe
                 }
             }
 
-            lab[0].Text = name;
-            lab[1].Text = "";
+            lab1.Text = name;
+            lab2.Text = "";
             return;
         }
 
@@ -116,12 +78,19 @@ namespace TicTacToe
 
         private void PlayerTurnEvent(PlayerData player)
         {
-            lab[0].Text = player.playerName + " ist am Zug.";
+            lab1.BeginInvoke(() => { lab1.Text = player.playerName + " ist am Zug."; });
         }
 
-        private void PlayerWonEvent(PlayerData player)
+        private void PlayerWonEvent(PlayerData? player)
         {
-            lab[1].Text = player.playerName + " hat gewonnen";
+            if (player != null)
+            {
+                lab2.Text = player.playerName + " hat gewonnen";
+            }
+            else
+            {
+                lab2.Text = "Keiner hat gewonnen.";
+            }
         }
 
         ClientConnection Connection;
@@ -129,15 +98,16 @@ namespace TicTacToe
         {
             Clearall();
             Connection = new(name, IPEndPoint.Parse(Ep)); // $"127.0.1.2:{StaticGameInfo.GAME_PORT}") <--- stay here
+            this.Text = name + " " + Connection.player.playerID;
             Connection.playerEvent += PlayerEvent;
             Connection.playerTurnEvent += PlayerTurnEvent;
             Connection.playerWonEvent += PlayerWonEvent;
         }
         private void button2_Click(object sender, EventArgs e)
         {
-            InitializeComponent();
+            //InitializeComponent();
             Ep = Microsoft.VisualBasic.Interaction.InputBox("Wählen sie die Ip", "IP-Selector", "127.0.1.2");
-            Ep = Ep + ":" + StaticGameInfo.GAME_PORT;          
+            Ep = Ep + ":" + StaticGameInfo.GAME_PORT;
         }
 
     }
