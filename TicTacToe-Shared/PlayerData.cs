@@ -4,6 +4,10 @@ namespace TicTacToe_Shared;
 
 public class PlayerData
 {
+    public readonly string playerName;
+    public readonly byte playerID;
+    public const int MAX_NAME_LETTERS = 15;
+
     public PlayerData( string playerName, byte playerID )
     {
         if ( playerName.Length > MAX_NAME_LETTERS )
@@ -50,13 +54,4 @@ public class PlayerData
     {
         return Serialize( this );
     }
-
-    public override string ToString()
-    {
-        return $"\"{playerName}\" ID: {playerID}";
-    }
-
-    public readonly string playerName;
-    public readonly byte playerID;
-    public const int MAX_NAME_LETTERS = 15;
 }
