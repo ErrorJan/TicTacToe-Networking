@@ -30,12 +30,14 @@
         {
             button1 = new Button();
             button2 = new Button();
+            lab1 = new Label();
+            lab2 = new Label();
             SuspendLayout();
             // 
             // button1
             // 
             button1.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            button1.Location = new Point(250, 100);
+            button1.Location = new Point(250, 73);
             button1.Name = "button1";
             button1.Size = new Size(112, 47);
             button1.TabIndex = 0;
@@ -46,7 +48,7 @@
             // button2
             // 
             button2.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            button2.Location = new Point(450, 50);
+            button2.Location = new Point(250, 142);
             button2.Name = "button2";
             button2.Size = new Size(148, 39);
             button2.TabIndex = 1;
@@ -54,21 +56,48 @@
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
+            // lab1
+            // 
+            lab1.AutoEllipsis = true;
+            lab1.AutoSize = true;
+            lab1.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            lab1.Location = new Point(250, 30);
+            lab1.MinimumSize = new Size(200, 40);
+            lab1.Name = "lab1";
+            lab1.Size = new Size(200, 40);
+            lab1.TabIndex = 2;
+            lab1.Text = "Spieler";
+            // 
+            // lab2
+            // 
+            lab2.AutoSize = true;
+            lab2.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            lab2.Location = new Point(20, 215);
+            lab2.Name = "lab2";
+            lab2.Size = new Size(80, 20);
+            lab2.TabIndex = 3;
+            lab2.Text = "Ergebnis";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(lab2);
+            Controls.Add(lab1);
             Controls.Add(button2);
             Controls.Add(button1);
             Name = "Form1";
             Text = "Form1";
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private Button button1;
         private Button button2;
+        private Label lab1;
+        private Label lab2;
     }
 }
