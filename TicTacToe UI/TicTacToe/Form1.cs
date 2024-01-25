@@ -111,4 +111,47 @@ namespace TicTacToe
         }
 
     }
+
+
+    private static bool CheckBoardWin( BoardPlace[][] array, BoardPlace place )
+    {
+        // 0: 0 1 2
+        // 1: 0 1 2
+        // 2: 0 1 2
+
+        bool topLeft     = array[0][0] == place;
+        bool topRight    = array[0][2] == place;
+        bool bottomLeft  = array[2][0] == place;
+        bool bottomRight = array[2][2] == place;
+
+        bool middleLeft = array[1][0] == place;
+        bool middleRight = array[1][2] == place;
+        
+        bool top = array[0][1] == place;
+        bool middle = array[1][1] == place;
+        bool bottom = array[2][1] == place;
+        
+        return 
+        ( middle && ( topLeft && bottomRight || topRight && bottomLeft || ( top && bottom ) || ( middleRight && middleLeft ) ) ) ||
+        ( topLeft && ( ( topRight && top ) || ( bottomLeft && middleLeft ) ) ) ||
+        ( bottomRight && ( ( topRight && middleRight ) || ( bottomLeft && bottom ) ) ); 
+    }
+
+    private static bool CheckBoardFree( BoardPlace[][] array )
+    {
+        bool free = false;
+
+        foreach ( BoardPlace[] pArr in array )
+        {
+            foreach ( BoardPlace p in pArr )
+            {
+                if ( p == BoardPlace.Unassigned )
+                {
+                    free = true;
+                }
+            }
+        }
+
+        return free;
+    }
 }
