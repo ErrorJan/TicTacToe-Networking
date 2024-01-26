@@ -8,12 +8,17 @@ namespace TicTacToe
     public partial class Form1 : Form
     {
         private Button[,] but = new Button[3, 3];
+        private string[,] map = new string[3,3];
         private string name;
-        private string Ep;
+        private bool player1 = true,SpEnde;
+        private int MaxLength = 15;
+
         public Form1()
         {
             InitializeComponent();
             name = Microsoft.VisualBasic.Interaction.InputBox("Bitte geben Sie Ihren Namen ein.", "Nameauswahl", "Name");
+            if (name.Length > MaxLength)
+                name = name.Substring(0, MaxLength);
             this.Text = name;
             erzeuge();
             Clearall();
@@ -23,7 +28,6 @@ namespace TicTacToe
             int posX, posY;
             posX = 20;
             posY = 30;
-
 
             for (int i = 0; i < 3; i++)     // 9 Buttons für das Spiel Layout
             {
@@ -53,11 +57,13 @@ namespace TicTacToe
                 for (int j = 0; j < 3; j++)
                 {
                     but[i, j].Text = "";
+                    map[i, j] = "";
                 }
             }
 
             lab1.Text = name;
             lab2.Text = "";
+            SpEnde = false;
             return;
         }
 
@@ -65,93 +71,80 @@ namespace TicTacToe
         private void buttonsClick(object sender, EventArgs e)
         {
             Button aktBut = (Button)sender;
-            if (aktBut.Text == "" && Connection.currentTurn)
+            if (aktBut.Text == "" && SpEnde == false)
             {
-                Connection.SendAction(Convert.ToInt32(aktBut.Name[3]) - 48, Convert.ToInt32(aktBut.Name[5]) - 48);
+                if (player1)
+                {
+                    aktBut.Text = "O";
+                    player1 = false;
+                    map[Convert.ToInt32(aktBut.Name[3] - 48), Convert.ToInt32(aktBut.Name[5]) - 48] = aktBut.Text;
+                    if (CheckBoardWin(map, "O"))
+                    {
+                        lab2.Text = "Player 1 won.";
+                        SpEnde = true;
+                    }
+                }
+                else
+                {
+                    aktBut.Text = "X";
+                    player1 = true;
+                    map[Convert.ToInt32(aktBut.Name[3] - 48), Convert.ToInt32(aktBut.Name[5]) - 48] = aktBut.Text;
+                    if (CheckBoardWin(map, "X"))
+                    {
+                        lab2.Text = "Player 2 won.";
+                        SpEnde = true;
+                    }
+                }
+
+                if(!CheckBoardFree(map) && SpEnde == false)
+                {
+                    lab2.Text = "Das Spiel hat keinen Sieger";
+                }
+                                           
             }
             return;
         }
-        private void PlayerEvent(BoardMove move)
+        private static bool CheckBoardWin( string[,] array, string place )
         {
-            but[move.x, move.y].Text = move.place.ToString();
+            // 0: 0 1 2
+            // 1: 0 1 2
+            // 2: 0 1 2
+
+            bool topLeft     = array[0,0] == place;
+            bool topRight    = array[0,2] == place;
+            bool bottomLeft  = array[2,0] == place;
+            bool bottomRight = array[2,2] == place;
+
+            bool middleLeft = array[1,0] == place;
+            bool middleRight = array[1,2] == place;
+        
+            bool top = array[0,1] == place;
+            bool middle = array[1,1] == place;
+            bool bottom = array[2,1] == place;
+        
+            return 
+            ( middle && ( topLeft && bottomRight || topRight && bottomLeft || ( top && bottom ) || ( middleRight && middleLeft ) ) ) ||
+            ( topLeft && ( ( topRight && top ) || ( bottomLeft && middleLeft ) ) ) ||
+            ( bottomRight && ( ( topRight && middleRight ) || ( bottomLeft && bottom ) ) ); 
         }
 
-        private void PlayerTurnEvent(PlayerData player)
+        private static bool CheckBoardFree( string[,] array )
         {
-            lab1.BeginInvoke(() => { lab1.Text = player.playerName + " ist am Zug."; });
-        }
+            bool free = false;
 
-        private void PlayerWonEvent(PlayerData? player)
-        {
-            if (player != null)
-            {
-                lab2.Text = player.playerName + " hat gewonnen";
+            foreach ( string pArr in array )
+            {          
+                if ( String.IsNullOrEmpty(pArr))
+                {
+                    free = true;
+                }              
             }
-            else
-            {
-                lab2.Text = "Keiner hat gewonnen.";
-            }
+            return free;
         }
 
-        ClientConnection Connection;
         private void button1_Click(object sender, EventArgs e)
         {
             Clearall();
-            Connection = new(name, IPEndPoint.Parse(Ep)); // $"127.0.1.2:{StaticGameInfo.GAME_PORT}") <--- stay here
-            this.Text = name + " " + Connection.player.playerID;
-            Connection.playerEvent += PlayerEvent;
-            Connection.playerTurnEvent += PlayerTurnEvent;
-            Connection.playerWonEvent += PlayerWonEvent;
         }
-        private void button2_Click(object sender, EventArgs e)
-        {
-            //InitializeComponent();
-            Ep = Microsoft.VisualBasic.Interaction.InputBox("Wählen sie die Ip", "IP-Selector", "127.0.1.2");
-            Ep = Ep + ":" + StaticGameInfo.GAME_PORT;
-        }
-
-    }
-
-
-    private static bool CheckBoardWin( BoardPlace[][] array, BoardPlace place )
-    {
-        // 0: 0 1 2
-        // 1: 0 1 2
-        // 2: 0 1 2
-
-        bool topLeft     = array[0][0] == place;
-        bool topRight    = array[0][2] == place;
-        bool bottomLeft  = array[2][0] == place;
-        bool bottomRight = array[2][2] == place;
-
-        bool middleLeft = array[1][0] == place;
-        bool middleRight = array[1][2] == place;
-        
-        bool top = array[0][1] == place;
-        bool middle = array[1][1] == place;
-        bool bottom = array[2][1] == place;
-        
-        return 
-        ( middle && ( topLeft && bottomRight || topRight && bottomLeft || ( top && bottom ) || ( middleRight && middleLeft ) ) ) ||
-        ( topLeft && ( ( topRight && top ) || ( bottomLeft && middleLeft ) ) ) ||
-        ( bottomRight && ( ( topRight && middleRight ) || ( bottomLeft && bottom ) ) ); 
-    }
-
-    private static bool CheckBoardFree( BoardPlace[][] array )
-    {
-        bool free = false;
-
-        foreach ( BoardPlace[] pArr in array )
-        {
-            foreach ( BoardPlace p in pArr )
-            {
-                if ( p == BoardPlace.Unassigned )
-                {
-                    free = true;
-                }
-            }
-        }
-
-        return free;
-    }
+    } 
 }
