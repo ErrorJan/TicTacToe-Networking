@@ -1,7 +1,6 @@
 using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
-using TicTacToe_Shared;
 
 namespace TicTacToe
 {
