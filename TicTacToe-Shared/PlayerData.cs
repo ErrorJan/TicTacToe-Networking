@@ -20,7 +20,7 @@ public class PlayerData
 
         int stringSize;
 
-        for ( stringSize = 1; data[i] != 0; stringSize++ ) {}
+        for ( stringSize = 1; data[stringSize] != 0; stringSize++ ) {}
 
         if ( stringSize > MAX_NAME_LETTERS )
             throw new Exception( "Wrong name format. Too long!" );
