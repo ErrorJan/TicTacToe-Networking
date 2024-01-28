@@ -112,7 +112,7 @@ namespace TicTacToe
                     // Überpüft ob Spieler 1 gewonnen hat
                     if (CheckBoardWin(map, "O"))
                     {
-                        lab2.Text = "Player 1 won.";
+                        lab2.Text = "Spieler 1 hat gewonnen.";
                         SpEnde = true;
                     }
                 }
@@ -126,7 +126,7 @@ namespace TicTacToe
                     // Überpüft ob Spieler 2 gewonnen hat
                     if (CheckBoardWin(map, "X"))
                     {
-                        lab2.Text = "Player 2 won.";
+                        lab2.Text = "Spieler 2 hat gewonnen.";
                         SpEnde = true;
                     }
                 }
