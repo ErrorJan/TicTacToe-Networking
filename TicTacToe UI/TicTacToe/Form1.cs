@@ -57,6 +57,8 @@ namespace TicTacToe
 
                     // Erstellt ein neues, 2 dimensionales, Objekt der Klasse Button
                     but[i, j] = new Button();
+                    but[i, j].Height = 50;
+                    but[i, j].Width = 50;
                     but[i, j].Location = new Point(posX, posY);
                     but[i, j].Font = new Font("Microsoft sans serif", 24, FontStyle.Bold);
                     but[i, j].Name = $"but{i},{j}";
@@ -121,6 +123,9 @@ namespace TicTacToe
                         lab2.Text = "Spieler 1 hat gewonnen.";
                         SpEnde = true;
                     }
+
+                    if (SpEnde == false)
+                        lab1.Text = "Spieler 2 ist am Zug";
                 }
                 else
                 {
@@ -135,6 +140,10 @@ namespace TicTacToe
                         lab2.Text = "Spieler 2 hat gewonnen.";
                         SpEnde = true;
                     }
+
+                    if (SpEnde == false)
+                        lab1.Text = "Spieler 1 ist am Zug";
+                    
                 }
 
                 if (!CheckBoardFree(map) && SpEnde == false)
