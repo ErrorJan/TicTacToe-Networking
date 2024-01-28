@@ -10,11 +10,6 @@ public class PlayerData
 
     public PlayerData( string playerName, byte playerID )
     {
-        if ( playerName.Length == 0 )
-        {
-            playerName = $"Player{playerID}";
-        }
-
         this.playerName = playerName;
         this.playerID = playerID;
     }
