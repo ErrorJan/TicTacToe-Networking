@@ -75,7 +75,7 @@ namespace TicTacToe
                     
                     eventBytes = new byte[ 3 ];
                     server.Receive( eventBytes );
-                    var boardData = BoardMove.Deserialize( eventBytes );
+                    BoardData boardData = BoardMove.Deserialize( eventBytes );
                     playerEvent?.Invoke( boardData );
                 }
             }
