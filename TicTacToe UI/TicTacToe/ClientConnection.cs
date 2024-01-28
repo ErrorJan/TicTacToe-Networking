@@ -79,10 +79,7 @@ namespace TicTacToe
                     playerEvent?.Invoke( boardData );
                 }
             }
-            catch ( Exception e )
-            {
-                Console.WriteLine( e );
-            }
+            catch () { }
 
             server.Disconnect( false );
         }
