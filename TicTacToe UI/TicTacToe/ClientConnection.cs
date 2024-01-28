@@ -8,6 +8,7 @@ namespace TicTacToe
 {
     public class ClientConnection
     {
+        private Socket server;
         public PlayerData player { private set; get; }
         public PlayerData opponent { private set; get; }
         public bool currentTurn { private set; get; }
@@ -83,7 +84,5 @@ namespace TicTacToe
 
             server.Disconnect( false );
         }
-
-        private Socket server;
     }
 }
