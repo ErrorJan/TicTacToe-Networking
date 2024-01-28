@@ -173,9 +173,9 @@ namespace TicTacToe
         {
             bool free = false;
 
-            foreach ( string pArr in array )
+            foreach ( string character in array )
             {          
-                if ( String.IsNullOrEmpty(pArr))
+                if ( String.IsNullOrEmpty( character ) )
                 {
                     free = true;
                 }              
