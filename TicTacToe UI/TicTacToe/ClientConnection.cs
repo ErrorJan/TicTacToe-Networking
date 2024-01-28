@@ -23,8 +23,6 @@ namespace TicTacToe
             Console.WriteLine( $"Connected to {ipToServer}!" );
             byte[] buffer = new byte[ 1 ];
             server.Receive( buffer );
-            if ( playerName.Length > PlayerData.MAX_NAME_LETTERS )
-                playerName = playerName.Substring(0, PlayerData.MAX_NAME_LETTERS);
             player = new( playerName, buffer[0] );
             this.server.Send( player.Serialize() );
 
