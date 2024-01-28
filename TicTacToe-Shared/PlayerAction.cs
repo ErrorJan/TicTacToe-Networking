@@ -22,9 +22,6 @@ namespace TicTacToe_Shared
             int y = data[ 1 ];
             BoardPlace place = (BoardPlace)data[ 2 ];
 
-            if ( !Enum.IsDefined( typeof( BoardPlace ), data[ 2 ] ) )
-                throw new Exception( "Invalid board data!" );
-
             PlayerAction move = new ( x, y, place );
 
             return move;
