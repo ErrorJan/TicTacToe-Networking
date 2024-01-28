@@ -10,9 +10,6 @@ public class PlayerData
 
     public PlayerData( string playerName, byte playerID )
     {
-        if ( playerName.Length > MAX_NAME_LETTERS )
-            throw new Exception( $"Player name {playerName} is too long!" );
-        
         if ( playerName.Length == 0 )
         {
             playerName = $"Player{playerID}";
