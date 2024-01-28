@@ -35,10 +35,11 @@
             // 
             // button1
             // 
-            button1.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            button1.AutoSize = true;
+            button1.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
             button1.Location = new Point(250, 73);
             button1.Name = "button1";
-            button1.Size = new Size(112, 47);
+            button1.Size = new Size(119, 49);
             button1.TabIndex = 0;
             button1.Text = "Neues Spiel";
             button1.UseVisualStyleBackColor = true;

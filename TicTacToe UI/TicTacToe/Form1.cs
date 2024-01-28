@@ -6,8 +6,13 @@ namespace TicTacToe
 {
     public partial class Form1 : Form
     {
+        // Erstellt eine 2 dimensionale Array Referenz, namens but,
+        // zu der Klasse Button 
         private Button[,] but = new Button[3, 3];
-        private string[,] map = new string[3,3];        
+
+
+        private string[,] map = new string[3, 3];
+
         private bool player1 = true, SpEnde;
         private string name;
         private int MaxLength = 15;
@@ -17,14 +22,15 @@ namespace TicTacToe
             InitializeComponent();
 
             // Eingabe des Namens
-            name = Microsoft.VisualBasic.Interaction.InputBox("Bitte geben Sie Ihren Namen ein.", "Nameauswahl", "Name");         
+            name = Microsoft.VisualBasic.Interaction.InputBox
+                ("Bitte geben Sie Ihren Namen ein.", "Nameauswahl", "Name");
 
             // Klickt man auf "Abbrechen" oder wird das Programm geschlossen
             if (String.IsNullOrEmpty(name))
             {
                 System.Environment.Exit(0);
             }
-                
+
 
             // Ist der Name länger als 15 Buchstaben wird er verkürzt
             if (name.Length > MaxLength)
@@ -38,7 +44,7 @@ namespace TicTacToe
         }
 
         // Erzeugt alle buttons dynamisch
-        private void erzeuge()     
+        private void erzeuge()
         {
             int posX, posY;
             posX = 20;
@@ -49,16 +55,14 @@ namespace TicTacToe
                 for (int j = 0; j < 3; j++)
                 {
 
-                    // Erstellt ein neues Objekt der Klasse Button
+                    // Erstellt ein neues, 2 dimensionales, Objekt der Klasse Button
                     but[i, j] = new Button();
-
-                    but[i, j].Width = 50;
-                    but[i, j].Height = 50;
                     but[i, j].Location = new Point(posX, posY);
                     but[i, j].Font = new Font("Microsoft sans serif", 24, FontStyle.Bold);
                     but[i, j].Name = $"but{i},{j}";
 
-                    // Zuweisung der Methode "buttonsClick" zu der Aktion, wenn ein Button geklickt wird
+                    // Zuweisung der Methode "buttonsClick" zu der Aktion,
+                    // wenn ein Button geklickt wird
                     but[i, j].Click += buttonsClick;
 
                     // Fügt den Button zu dem Form zu 
@@ -76,7 +80,7 @@ namespace TicTacToe
         }
 
         // Die Methode setzt alles zurück wie es am Anfang war
-        void Clearall()             
+        void Clearall()
         {
             for (int i = 0; i < 3; i++)
             {
@@ -97,6 +101,8 @@ namespace TicTacToe
         // Methode für die Buttons der Map
         private void buttonsClick(object sender, EventArgs e)
         {
+            // internets Objekt, des Typs Button, mit der
+            // Referenz auf Sender Objekt
             Button aktBut = (Button)sender;
             if (aktBut.Text == "" && SpEnde == false)
             {
@@ -131,17 +137,17 @@ namespace TicTacToe
                     }
                 }
 
-                if(!CheckBoardFree(map) && SpEnde == false)
+                if (!CheckBoardFree(map) && SpEnde == false)
                 {
                     lab2.Text = "Das Spiel hat keinen Sieger";
                 }
-                                           
+
             }
             return;
         }
 
         // Überprüft ob jemand gewonnen hat
-        private static bool CheckBoardWin( string[,] array, string place )
+        private static bool CheckBoardWin(string[,] array, string place)
         {
             // 0: 0 1 2
             // 1: 0 1 2
@@ -149,36 +155,36 @@ namespace TicTacToe
 
             // Ist an dem Platz im Array ein Zeichen vorhanden, ist der boolean true 
 
-            bool topLeft     = array[0,0] == place;
-            bool topRight    = array[0,2] == place;
-            bool bottomLeft  = array[2,0] == place;
-            bool bottomRight = array[2,2] == place;
+            bool topLeft = array[0, 0] == place;
+            bool topRight = array[0, 2] == place;
+            bool bottomLeft = array[2, 0] == place;
+            bool bottomRight = array[2, 2] == place;
 
-            bool middleLeft = array[1,0] == place;
-            bool middleRight = array[1,2] == place;
-        
-            bool top = array[0,1] == place;
-            bool middle = array[1,1] == place;
-            bool bottom = array[2,1] == place;
-        
-            return 
-            ( middle && ( topLeft && bottomRight || topRight && bottomLeft || ( top && bottom ) || ( middleRight && middleLeft ) ) ) ||
-            ( topLeft && ( ( topRight && top ) || ( bottomLeft && middleLeft ) ) ) ||
-            ( bottomRight && ( ( topRight && middleRight ) || ( bottomLeft && bottom ) ) ); 
+            bool middleLeft = array[1, 0] == place;
+            bool middleRight = array[1, 2] == place;
+
+            bool top = array[0, 1] == place;
+            bool middle = array[1, 1] == place;
+            bool bottom = array[2, 1] == place;
+
+            return
+            (middle && (topLeft && bottomRight || topRight && bottomLeft || (top && bottom) || (middleRight && middleLeft))) ||
+            (topLeft && ((topRight && top) || (bottomLeft && middleLeft))) ||
+            (bottomRight && ((topRight && middleRight) || (bottomLeft && bottom)));
         }
 
         // Methode die überprüft ob es frei Platze gibt 
         // Kann man keine Spielzuge mehr machen und keiner hat gewonnen, ist das Spiel unentschieden
-        private static bool CheckBoardFree( string[,] array )
+        private static bool CheckBoardFree(string[,] array)
         {
             bool free = false;
 
-            foreach ( string character in array )
-            {          
-                if ( String.IsNullOrEmpty( character ) )
+            foreach (string character in array)
+            {
+                if (String.IsNullOrEmpty(character))
                 {
                     free = true;
-                }              
+                }
             }
             return free;
         }
@@ -188,5 +194,5 @@ namespace TicTacToe
         {
             Clearall();
         }
-    } 
+    }
 }
