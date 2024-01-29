@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.RegularExpressions;
+using TicTacToe_Shared;
 
 namespace TicTacToe
 {
@@ -17,14 +18,14 @@ namespace TicTacToe
             InitializeComponent();
 
             // Eingabe des Namens
-            name = Microsoft.VisualBasic.Interaction.InputBox("Bitte geben Sie Ihren Namen ein.", "Nameauswahl", "Name");         
+            name = Microsoft.VisualBasic.Interaction.InputBox("Bitte geben Sie Ihren Namen ein.", "Nameauswahl", "Name");
 
             // Klickt man auf "Abbrechen" oder wird das Programm geschlossen
             if (String.IsNullOrEmpty(name))
             {
                 System.Environment.Exit(0);
             }
-                
+
 
             // Ist der Name länger als 15 Buchstaben wird er verkürzt
             if (name.Length > MaxLength)
@@ -38,7 +39,7 @@ namespace TicTacToe
         }
 
         // Erzeugt alle buttons dynamisch
-        private void erzeuge()     
+        private void erzeuge()
         {
             int posX, posY;
             posX = 20;
@@ -76,7 +77,7 @@ namespace TicTacToe
         }
 
         // Die Methode setzt alles zurück wie es am Anfang war
-        void Clearall()             
+        void Clearall()
         {
             for (int i = 0; i < 3; i++)
             {
@@ -198,28 +199,17 @@ namespace TicTacToe
 
         private ClientConnection connection;
         // Wird aufgerufen klickt man auf "Neues Spiel"  
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Clearall();
-
-            connection = new( name, IPEndPoint.Parse( ipAddr ) );
-            this.Text = name + " " + connection.player.playerID;
-            connection.playerEvent += PlayerEvent;
-            connection.playerTurnEvent += PlayerTurnEvent;
-            connection.playerWonEvent += PlayerWonEvent;
-        }
-
-        private void PlayerEvent( PlayerAction playerAction )
+        private void PlayerEvent(PlayerAction move)
         {
             but[move.x, move.y].Text = move.place.ToString();
         }
 
-        private void PlayerTurnEvent( PlayerData player )
+        private void PlayerTurnEvent(PlayerData player)
         {
             lab1.BeginInvoke(() => { lab1.Text = player.playerName + " ist am Zug."; });
         }
 
-        private void PlayerWonEvent( PlayerData? player )
+        private void PlayerWonEvent(PlayerData? player)
         {
             if (player != null)
             {
@@ -230,5 +220,16 @@ namespace TicTacToe
                 lab2.Text = "Keiner hat gewonnen.";
             }
         }
-    } 
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            Clearall();
+
+            connection = new(name, IPEndPoint.Parse(ipAddr));
+            this.Text = name + " " + connection.player.playerID;
+            connection.playerEvent += PlayerEvent;
+            connection.playerTurnEvent += PlayerTurnEvent;
+            connection.playerWonEvent += PlayerWonEvent;
+        }
+    }
 }
