@@ -28,56 +28,68 @@
         /// </summary>
         private void InitializeComponent()
         {
-            button1 = new Button();
-            lab1 = new Label();
-            lab2 = new Label();
-            SuspendLayout();
+            this.button1 = new System.Windows.Forms.Button();
+            this.lab1 = new System.Windows.Forms.Label();
+            this.lab2 = new System.Windows.Forms.Label();
+            this.ipInput = new System.Windows.Forms.Button();
+            this.SuspendLayout();
             // 
             // button1
             // 
-            button1.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            button1.Location = new Point(250, 73);
-            button1.Name = "button1";
-            button1.Size = new Size(112, 47);
-            button1.TabIndex = 0;
-            button1.Text = "Neues Spiel";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.button1.Location = new System.Drawing.Point(250, 73);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(112, 47);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "Neues Spiel";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // lab1
             // 
-            lab1.AutoEllipsis = true;
-            lab1.AutoSize = true;
-            lab1.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            lab1.Location = new Point(250, 30);
-            lab1.MinimumSize = new Size(200, 40);
-            lab1.Name = "lab1";
-            lab1.Size = new Size(200, 40);
-            lab1.TabIndex = 2;
-            lab1.Text = "Spieler";
+            this.lab1.AutoEllipsis = true;
+            this.lab1.AutoSize = true;
+            this.lab1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lab1.Location = new System.Drawing.Point(250, 30);
+            this.lab1.MinimumSize = new System.Drawing.Size(200, 40);
+            this.lab1.Name = "lab1";
+            this.lab1.Size = new System.Drawing.Size(200, 40);
+            this.lab1.TabIndex = 2;
+            this.lab1.Text = "Spieler";
             // 
             // lab2
             // 
-            lab2.AutoSize = true;
-            lab2.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            lab2.Location = new Point(20, 215);
-            lab2.Name = "lab2";
-            lab2.Size = new Size(80, 20);
-            lab2.TabIndex = 3;
-            lab2.Text = "Ergebnis";
+            this.lab2.AutoSize = true;
+            this.lab2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lab2.Location = new System.Drawing.Point(20, 215);
+            this.lab2.Name = "lab2";
+            this.lab2.Size = new System.Drawing.Size(80, 20);
+            this.lab2.TabIndex = 3;
+            this.lab2.Text = "Ergebnis";
+            // 
+            // ipInput
+            // 
+            this.ipInput.Location = new System.Drawing.Point(250, 126);
+            this.ipInput.Name = "ipInput";
+            this.ipInput.Size = new System.Drawing.Size(112, 39);
+            this.ipInput.TabIndex = 4;
+            this.ipInput.Text = "IP Input";
+            this.ipInput.UseVisualStyleBackColor = true;
+            this.ipInput.Click += new System.EventHandler(this.button2_Click);
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(lab2);
-            Controls.Add(lab1);
-            Controls.Add(button1);
-            Name = "Form1";
-            Text = "Form1";
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.ipInput);
+            this.Controls.Add(this.lab2);
+            this.Controls.Add(this.lab1);
+            this.Controls.Add(this.button1);
+            this.Name = "Form1";
+            this.Text = "Form1";
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
@@ -85,5 +97,6 @@
         private Button button1;
         private Label lab1;
         private Label lab2;
+        private Button ipInput;
     }
 }

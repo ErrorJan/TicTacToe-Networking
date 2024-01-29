@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
 
@@ -181,6 +180,11 @@ namespace TicTacToe
                 }              
             }
             return free;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
         }
 
         // Wird aufgerufen klickt man auf "Neues Spiel"  

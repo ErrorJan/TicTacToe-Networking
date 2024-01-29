@@ -12,7 +12,7 @@ namespace TicTacToe
         public PlayerData player { private set; get; }
         public PlayerData opponent { private set; get; }
         public bool currentTurn { private set; get; }
-        public event Action<BoardMove>? playerEvent;
+        public event Action<PlayerAction>? playerEvent;
         public event Action<PlayerData>? playerTurnEvent;
         public event Action<PlayerData?>? playerWonEvent;
 
@@ -39,8 +39,8 @@ namespace TicTacToe
             if ( currentTurn )
             {
                 BoardPlace place = player.playerID == 1 ? BoardPlace.X : BoardPlace.O;
-                BoardMove move = new( x, y, place );
-                server.Send( BoardMove.SerializeMove( move ) );
+                PlayerAction move = new( x, y, place );
+                server.Send(PlayerAction.Serialize( move ) );
             }
         }
 
@@ -76,11 +76,10 @@ namespace TicTacToe
                     
                     eventBytes = new byte[ 3 ];
                     server.Receive( eventBytes );
-                    BoardData boardData = BoardMove.Deserialize( eventBytes );
-                    playerEvent?.Invoke( boardData );
+                    playerEvent?.Invoke( PlayerAction.Deserialize(eventBytes) );
                 }
             }
-            catch () { }
+            catch (Exception) { }
 
             server.Disconnect( false );
         }
