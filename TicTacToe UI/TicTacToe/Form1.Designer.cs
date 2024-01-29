@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             button1 = new Button();
+            button2 = new Button();
             lab1 = new Label();
             lab2 = new Label();
             SuspendLayout();
@@ -43,6 +44,17 @@
             button1.Text = "Neues Spiel";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
+            // 
+            // button2
+            // 
+            button2.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            button2.Location = new Point(250, 142);
+            button2.Name = "button2";
+            button2.Size = new Size(148, 39);
+            button2.TabIndex = 1;
+            button2.Text = "Select Server IP";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // lab1
             // 
@@ -73,6 +85,7 @@
             ClientSize = new Size(800, 450);
             Controls.Add(lab2);
             Controls.Add(lab1);
+            Controls.Add(button2);
             Controls.Add(button1);
             Name = "Form1";
             Text = "Form1";
@@ -83,6 +96,7 @@
         #endregion
 
         private Button button1;
+        private Button button2;
         private Label lab1;
         private Label lab2;
     }

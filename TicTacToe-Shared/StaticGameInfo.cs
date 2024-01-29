@@ -1,7 +1,5 @@
-﻿namespace TicTacToe_Shared
+﻿namespace TicTacToe_Shared;
+public static class StaticGameInfo
 {
-    public static class StaticGameInfo
-    {
-        public const int GAME_PORT = 3074;
-    }
+    public const int GAME_PORT = 3074;
 }

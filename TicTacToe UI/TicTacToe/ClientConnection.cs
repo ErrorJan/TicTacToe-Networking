@@ -1,3 +1,5 @@
+/**/ //If things break, just remove the "* /"
+
 using TicTacToe_Shared;
 using System.Net;
 using System.Net.Sockets;
@@ -8,13 +10,13 @@ namespace TicTacToe
 {
     public class ClientConnection
     {
-        private Socket server;
         public PlayerData player { private set; get; }
         public PlayerData opponent { private set; get; }
         public bool currentTurn { private set; get; }
         public event Action<BoardMove>? playerEvent;
         public event Action<PlayerData>? playerTurnEvent;
         public event Action<PlayerData?>? playerWonEvent;
+        public Task receiveActionTask;
 
         public ClientConnection( string playerName, IPEndPoint ipToServer )
         {
@@ -22,16 +24,22 @@ namespace TicTacToe
             this.server = new ( ipToServer.AddressFamily, SocketType.Stream, ProtocolType.Tcp );
             this.server.Connect( ipToServer );
             Console.WriteLine( $"Connected to {ipToServer}!" );
+            Console.WriteLine( "Receiving player ID!" );
             byte[] buffer = new byte[ 1 ];
             server.Receive( buffer );
+            if ( playerName.Length > PlayerData.MAX_NAME_LETTERS )
+                playerName = playerName.Substring(0, PlayerData.MAX_NAME_LETTERS);
             player = new( playerName, buffer[0] );
+            Console.WriteLine( $"Full PlayerData: {player}" );
             this.server.Send( player.Serialize() );
 
+            Console.WriteLine( "Receiving other player..." );
             buffer = new byte[ 512 ];
             server.Receive( buffer );
             opponent = PlayerData.Deserialize( buffer );
+            Console.WriteLine( $"Opponent: {opponent}" );
 
-            Task.Run( ReceiveAction );
+            receiveActionTask = Task.Run( ReceiveAction );
         }
 
         public async Task SendAction( int x, int y )
@@ -74,15 +82,30 @@ namespace TicTacToe
                         break;
                     }
                     
+
                     eventBytes = new byte[ 3 ];
                     server.Receive( eventBytes );
-                    BoardData boardData = BoardMove.Deserialize( eventBytes );
+                    var boardData = BoardMove.Deserialize( eventBytes );
                     playerEvent?.Invoke( boardData );
                 }
             }
-            catch () { }
+            catch ( Exception e )
+            {
+                Console.WriteLine( e );
+            }
 
             server.Disconnect( false );
         }
+
+        private Socket server;
+
+        ~ClientConnection()
+        {
+            server.Close();
+            Console.WriteLine( "Closing!" ); // <-- Test if this works, by just setting null reference.
+            receiveActionTask.Wait();
+        }
     }
 }
+        
+/**/
