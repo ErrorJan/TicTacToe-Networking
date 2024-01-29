@@ -6,10 +6,11 @@ namespace TicTacToe
     public partial class Form1 : Form
     {
         private Button[,] but = new Button[3, 3];
-        private string[,] map = new string[3,3];        
-        private bool player1 = true, SpEnde;
+        //private string[,] map = new string[3,3];        
+        //private bool player1 = true, SpEnde;
         private string name;
         private int MaxLength = 15;
+        private string ipAddr = "127.0.1.2";
 
         public Form1()
         {
@@ -82,14 +83,14 @@ namespace TicTacToe
                 for (int j = 0; j < 3; j++)
                 {
                     but[i, j].Text = "";
-                    map[i, j] = "";
+                    //map[i, j] = "";
                 }
             }
 
             lab1.Text = name;
             lab2.Text = "";
-            SpEnde = false;
-            player1 = true;
+            /*SpEnde = false;
+            player1 = true;*/
             return;
         }
 
@@ -97,7 +98,12 @@ namespace TicTacToe
         private void buttonsClick(object sender, EventArgs e)
         {
             Button aktBut = (Button)sender;
-            if (aktBut.Text == "" && SpEnde == false)
+            if (aktBut.Text == "" && connection.currentTurn)
+            {
+                connection.SendAction(Convert.ToInt32(aktBut.Name[3]) - 48, Convert.ToInt32(aktBut.Name[5]) - 48);
+            }
+
+            /*if (aktBut.Text == "" && SpEnde == false)
             {
                 if (player1)
                 {
@@ -135,12 +141,13 @@ namespace TicTacToe
                     lab2.Text = "Das Spiel hat keinen Sieger";
                 }
                                            
-            }
+            }*/
+
             return;
         }
 
         // Überprüft ob jemand gewonnen hat
-        private static bool CheckBoardWin( string[,] array, string place )
+        /*private static bool CheckBoardWin( string[,] array, string place )
         {
             // 0: 0 1 2
             // 1: 0 1 2
@@ -180,17 +187,48 @@ namespace TicTacToe
                 }              
             }
             return free;
-        }
+        }*/
 
+        // IP Eingabe
         private void button2_Click(object sender, EventArgs e)
         {
-
+            ipAddr = Microsoft.VisualBasic.Interaction.InputBox("Wählen sie die Ip", "IP-Selector", "127.0.1.2");
+            ipAddr = ipAddr + ":" + StaticGameInfo.GAME_PORT;
         }
 
+        private ClientConnection connection;
         // Wird aufgerufen klickt man auf "Neues Spiel"  
         private void button1_Click(object sender, EventArgs e)
         {
             Clearall();
+
+            connection = new( name, IPEndPoint.Parse( ipAddr ) );
+            this.Text = name + " " + connection.player.playerID;
+            connection.playerEvent += PlayerEvent;
+            connection.playerTurnEvent += PlayerTurnEvent;
+            connection.playerWonEvent += PlayerWonEvent;
+        }
+
+        private void PlayerEvent( PlayerAction playerAction )
+        {
+            but[move.x, move.y].Text = move.place.ToString();
+        }
+
+        private void PlayerTurnEvent( PlayerData player )
+        {
+            lab1.BeginInvoke(() => { lab1.Text = player.playerName + " ist am Zug."; });
+        }
+
+        private void PlayerWonEvent( PlayerData? player )
+        {
+            if (player != null)
+            {
+                lab2.Text = player.playerName + " hat gewonnen";
+            }
+            else
+            {
+                lab2.Text = "Keiner hat gewonnen.";
+            }
         }
     } 
 }
