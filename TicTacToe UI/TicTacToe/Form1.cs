@@ -11,7 +11,7 @@ namespace TicTacToe
         //private bool player1 = true, SpEnde;
         private string name;
         private int MaxLength = 15;
-        private string ipAddr = "127.0.1.2";
+        private string ipAddr = "127.0.1.2:3074";
 
         public Form1()
         {
