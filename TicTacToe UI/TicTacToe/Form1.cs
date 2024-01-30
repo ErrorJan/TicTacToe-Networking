@@ -199,17 +199,17 @@ namespace TicTacToe
 
         private ClientConnection connection;
         // Wird aufgerufen klickt man auf "Neues Spiel"  
-        private void PlayerEvent(PlayerAction move)
+        public void PlayerEvent(PlayerAction move)
         {
             but[move.x, move.y].Text = move.place.ToString();
         }
 
-        private void PlayerTurnEvent(PlayerData player)
+        public void PlayerTurnEvent(PlayerData player)
         {
             lab1.BeginInvoke(() => { lab1.Text = player.playerName + " ist am Zug."; });
         }
 
-        private void PlayerWonEvent(PlayerData? player)
+        public void PlayerWonEvent(PlayerData? player)
         {
             if (player != null)
             {
@@ -227,9 +227,6 @@ namespace TicTacToe
 
             connection = new(name, IPEndPoint.Parse(ipAddr));
             this.Text = name + " " + connection.player.playerID;
-            connection.playerEvent += PlayerEvent;
-            connection.playerTurnEvent += PlayerTurnEvent;
-            connection.playerWonEvent += PlayerWonEvent;
         }
     }
 }

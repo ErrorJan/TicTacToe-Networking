@@ -12,11 +12,9 @@ namespace TicTacToe
         public PlayerData player { private set; get; }
         public PlayerData opponent { private set; get; }
         public bool currentTurn { private set; get; }
-        public event Action<PlayerAction>? playerEvent;
-        public event Action<PlayerData>? playerTurnEvent;
-        public event Action<PlayerData?>? playerWonEvent;
+        private Form1 gui;
 
-        public ClientConnection( string playerName, IPEndPoint ipToServer )
+        public ClientConnection( string playerName, IPEndPoint ipToServer, Form1 gui )
         {
             //IPEndPoint.Parse( $"127.0.1.2:{StaticGameInfo.GAME_PORT}" );
             this.server = new ( ipToServer.AddressFamily, SocketType.Stream, ProtocolType.Tcp );
@@ -26,6 +24,7 @@ namespace TicTacToe
             server.Receive( buffer );
             player = new( playerName, buffer[0] );
             this.server.Send( player.Serialize() );
+            this.gui = gui;
 
             buffer = new byte[ 512 ];
             server.Receive( buffer );
@@ -34,13 +33,13 @@ namespace TicTacToe
             Task.Run( ReceiveAction );
         }
 
-        public async Task SendAction( int x, int y )
+        public void SendAction( int x, int y )
         {
             if ( currentTurn )
             {
                 BoardPlace place = player.playerID == 1 ? BoardPlace.X : BoardPlace.O;
                 PlayerAction move = new( x, y, place );
-                server.Send(PlayerAction.Serialize( move ) );
+                server.Send( PlayerAction.Serialize( move ) );
             }
         }
 
@@ -57,26 +56,26 @@ namespace TicTacToe
                     {
                         currentTurn = eventBytes[1] == player.playerID;
                         if ( currentTurn )
-                            playerTurnEvent?.Invoke( player );
+                            gui.PlayerTurnEvent( player );
                         else
-                            playerTurnEvent?.Invoke( opponent );
+                            gui.PlayerTurnEvent( opponent );
                     }
                     else if ( eventBytes[0] == 1 )
                     {
                         bool thisPlayerWon = eventBytes[1] == player.playerID;
                         if ( thisPlayerWon )
-                            playerWonEvent?.Invoke( player );
+                            gui.PlayerWonEvent( player );
                         else if (eventBytes[1] > 0 )                        
-                            playerWonEvent?.Invoke( opponent );
+                            gui.PlayerWonEvent( opponent );
                         else 
-                            playerWonEvent?.Invoke( null );
+                            gui.PlayerWonEvent( null );
 
                         break;
                     }
                     
                     eventBytes = new byte[ 3 ];
                     server.Receive( eventBytes );
-                    playerEvent?.Invoke( PlayerAction.Deserialize(eventBytes) );
+                    gui.PlayerEvent( PlayerAction.Deserialize(eventBytes) );
                 }
             }
             catch (Exception) { }
