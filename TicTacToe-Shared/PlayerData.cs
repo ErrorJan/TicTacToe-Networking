@@ -21,7 +21,9 @@ public class PlayerData
         int stringSize = 1;
 
         while ( data[stringSize] != 0 )
+        {
             stringSize++;
+        }
 
         string playerName = Encoding.UTF8.GetString( data, 1, stringSize );
 
@@ -34,9 +36,10 @@ public class PlayerData
     {
         byte[] playerNameBytes = Encoding.UTF8.GetBytes( player.playerName );
 
-        byte[] dataBytes = new byte[ 1 + playerNameBytes.Length ];
+        byte[] dataBytes = new byte[ 1 + playerNameBytes.Length + 1 ];
         dataBytes[0] = player.playerID;
         Array.Copy( playerNameBytes, 0, dataBytes, 1, playerNameBytes.Length );
+        dataBytes[dataBytes.Length - 1] = 0;
 
         return dataBytes;
     }
