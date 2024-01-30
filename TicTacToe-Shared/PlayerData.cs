@@ -18,9 +18,10 @@ public class PlayerData
     {
         byte playerID = data[0];
 
-        int stringSize;
+        int stringSize = 1;
 
-        for ( stringSize = 1; data[stringSize] != 0; stringSize++ ) {}
+        while ( data[stringSize] != 0 )
+            stringSize++;
 
         string playerName = Encoding.UTF8.GetString( data, 1, stringSize );
 
