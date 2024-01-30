@@ -225,7 +225,7 @@ namespace TicTacToe
         {
             Clearall();
 
-            connection = new(name, IPEndPoint.Parse(ipAddr));
+            connection = new(name, IPEndPoint.Parse(ipAddr), this);
             this.Text = name + " " + connection.player.playerID;
         }
     }
