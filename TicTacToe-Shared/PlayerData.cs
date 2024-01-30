@@ -18,9 +18,9 @@ public class PlayerData
     {
         byte playerID = data[0];
 
-        int stringSize = 1;
+        int stringSize = 0;
 
-        while ( data[stringSize] != 0 )
+        while ( data[stringSize+1] != 0 )
         {
             stringSize++;
         }
