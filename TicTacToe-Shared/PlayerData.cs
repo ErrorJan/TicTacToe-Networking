@@ -33,10 +33,9 @@ public class PlayerData
     {
         byte[] playerNameBytes = Encoding.UTF8.GetBytes( player.playerName );
 
-        byte[] dataBytes = new byte[ 1 + playerNameBytes.Length + 1 ];
+        byte[] dataBytes = new byte[ 1 + playerNameBytes.Length ];
         dataBytes[0] = player.playerID;
         Array.Copy( playerNameBytes, 0, dataBytes, 1, playerNameBytes.Length );
-        dataBytes[ dataBytes.Length - 1 ] = 0;
 
         return dataBytes;
     }
