@@ -13,12 +13,16 @@ namespace TicTacToe
         private int MaxLength = 15;
         private string ipAddr = "127.0.1.2:3074";
 
+        // Erstellt ein Objekt der Klasse ClientConnection 
+        private ClientConnection connection;
+
         public Form1()
         {
             InitializeComponent();
 
             // Eingabe des Namens
-            name = Microsoft.VisualBasic.Interaction.InputBox("Bitte geben Sie Ihren Namen ein.", "Nameauswahl", "Name");
+            name = Microsoft.VisualBasic.Interaction.InputBox
+                ("Bitte geben Sie Ihren Namen ein.", "Nameauswahl", "Name");
 
             // Klickt man auf "Abbrechen" oder wird das Programm geschlossen
             if (String.IsNullOrEmpty(name))
@@ -101,6 +105,9 @@ namespace TicTacToe
             Button aktBut = (Button)sender;
             if (aktBut.Text == "" && connection.currentTurn)
             {
+                // Um die jetzige Position herauszufinden, muss man den Namen des Buttons benutzen
+                // Zum Beispiel "but0,0" ist der Name des erstens Buttons
+                // Sendet die Daten an den Server 
                 connection.SendAction(Convert.ToInt32(aktBut.Name[3]) - 48, Convert.ToInt32(aktBut.Name[5]) - 48);
             }
 
@@ -197,18 +204,26 @@ namespace TicTacToe
             ipAddr = ipAddr + ":" + StaticGameInfo.GAME_PORT;
         }
 
-        private ClientConnection connection;
-        // Wird aufgerufen klickt man auf "Neues Spiel"  
+        // Methode für die Anzeige des jetzigen Spielzugs.
         public void PlayerEvent(PlayerAction move)
         {
             but[move.x, move.y].Text = move.place.ToString();
         }
 
+        // Zeigt den jetzigen Spieler an.
         public void PlayerTurnEvent(PlayerData player)
         {
+            // Führt die Anonyme Funktion asynchron aus, auf dem Thread, auf dem dieses UI Element erstellt worden ist.
+            // Eine Anonyme Funktion ist eine Funktion ohne ein Namen.
+            // Bsp.: () => { Console.WriteLine("Hello World"); }
+            // ist fast gleich wie:
+            // private void funcname()
+            // { Console.WriteLine( "Hello World" ); }
             lab1.BeginInvoke(() => { lab1.Text = player.playerName + " ist am Zug."; });
         }
 
+        // Überprüft ob jemand gewonnen hat.
+        // Das "?" sagt, dass dieser Typ "null" sein darf.
         public void PlayerWonEvent(PlayerData? player)
         {
             if (player != null)
@@ -221,6 +236,7 @@ namespace TicTacToe
             }
         }
 
+        // Wird aufgerufen klickt man auf "Neues Spiel"  
         private void button1_Click_1(object sender, EventArgs e)
         {
             Clearall();
